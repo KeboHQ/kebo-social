@@ -18,7 +18,7 @@
  * If the Title has been set, output it.
  */
 if ( ! empty( $title ) ) {
-
+    
     /**
      * Already contains: $widget_id, $friends, $instance, $before $before_title, $title, $after_title
      */
@@ -30,7 +30,7 @@ if ( ! empty( $title ) ) {
 
 ?>
 
-<ul class="kfollowers">
+<ul class="<?php echo implode( ' ', $classes ); ?>">
     
     <?php
     /**
@@ -38,12 +38,15 @@ if ( ! empty( $title ) ) {
      */
     foreach ( $followers as $follower ) {
         
+        $profile_image = ( is_ssl() ) ? $follower['profile_image_url_https'] : $follower['profile_image_url'] ;
+        
         /**
          * Already contains: $widget_id, $friends, $instance
          */
         $view
             ->set_view( '_follower' )
             ->set( 'follower', $follower )
+            ->set( 'profile_image', $profile_image )
             ->render();
                 
     }

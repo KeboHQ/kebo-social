@@ -10,7 +10,7 @@
 
 <?php echo $before_widget; ?>
 
-<?php do_action( 'kbso_before_twitter_friends', $friends, $instance, $widget_id ); ?>
+<?php do_action( 'kbso_before_facebook_friends', $friends, $instance, $widget_id ); ?>
 
 <?php
 
@@ -38,7 +38,7 @@ if ( ! empty( $title ) ) {
      */
     foreach ( $friends as $friend ) {
         
-        $profile_image = ( is_ssl() ) ? $friend['profile_image_url_https'] : $friend['profile_image_url'] ;
+        $profile_image = $friend['picture']['data']['url'] ;
         
         /**
          * Already contains: $widget_id, $friends, $instance
@@ -55,6 +55,6 @@ if ( ! empty( $title ) ) {
     
 </ul><!-- .ktweets -->
 
-<?php do_action( 'kbso_after_twitter_friends', $friends, $instance, $widget_id ); ?>
+<?php do_action( 'kbso_after_facebook_friends', $friends, $instance, $widget_id ); ?>
 
 <?php echo $after_widget; ?>
