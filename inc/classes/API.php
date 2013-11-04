@@ -55,7 +55,7 @@ if ( ! class_exists( 'Kbso_Api' ) ) {
          */
         public function __construct() {
             
-            add_action( 'shutdown', array( $this, 'refresh_cache' ) );
+            //add_action( 'shutdown', array( $this, 'refresh_cache' ) );
             
         }
         
@@ -172,21 +172,34 @@ if ( ! class_exists( 'Kbso_Api' ) ) {
                     
                     unset( $data['expiry'] );
 
-                    if ( 'friends' == $this->type ) {
-
-                        // Add Social Data Together
-                        $combined_data = array_merge( $combined_data, $data['users'] );
-
-                    } elseif ( 'followers' == $this->type ) {
-
-                        // Add Social Data Together
-                        $combined_data = array_merge( $combined_data, $data['users'] );
-
-                    } else {
+                    if ( 'twitter' == $this->service ) {
                     
-                        // Add Social Data Together
-                        $combined_data = array_merge( $combined_data, $data );
+                        if ( 'friends' == $this->type ) {
+
+                            // Add Social Data Together
+                            $combined_data = array_merge( $combined_data, $data['users'] );
+
+                        } elseif ( 'followers' == $this->type ) {
+
+                            // Add Social Data Together
+                            $combined_data = array_merge( $combined_data, $data['users'] );
+
+                        } else {
+
+                            // Add Social Data Together
+                            $combined_data = array_merge( $combined_data, $data );
+
+                        }
                     
+                    } elseif ( 'facebook' == $this->service ) {
+                        
+                        if ( 'friends' == $this->type ) {
+                            
+                            // Add Social Data Together
+                            $combined_data = array_merge( $combined_data, $data['data'] );
+                            
+                        }
+                        
                     }
                     
                 }
@@ -277,7 +290,7 @@ if ( ! class_exists( 'Kbso_Api' ) ) {
                 'account' => ( isset( $account['account_name'] ) ) ? $account['account_name'] : null, // Service Account Name
                 'userid' => $account['account_id'], // Service User ID
                 'token' => $account['token'], // OAuth Token
-                'secret' => $account['secret'], // OAuth Secret
+                'secret' => ( isset( $account['secret'] ) ) ? $account['secret'] : null, // OAuth Secret
             );
 
             // Setup arguments for POST request.
@@ -290,7 +303,7 @@ if ( ! class_exists( 'Kbso_Api' ) ) {
                 'headers' => array(),
                 'body' => array(
                     'source' => 'kbso',
-                    'data' => json_encode($data),
+                    'data' => json_encode( $data ),
                 ),
                 'cookies' => array(),
                 'sslverify' => false,
@@ -306,7 +319,7 @@ if ( ! class_exists( 'Kbso_Api' ) ) {
 
                 $data = json_decode( $request['body'], true );
                 
-                if ( 'tweets' == $this->type ) {
+                if ( 'twitter' == $this->service && 'tweets' == $this->type ) {
                     
                     $data = $this->twitter_linkify( $data );
                     

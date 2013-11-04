@@ -26,7 +26,7 @@
 
     <div class="ktext">
 
-        <?php if ( true == $instance['avatar'] ) { ?>
+        <?php if ( true == $instance['avatar'] ) : ?>
         
         <a class="kavatar" href="<?php echo esc_url ( 'https://twitter.com/' . $screen_name ); ?>">
 
@@ -34,7 +34,7 @@
 
         </a>
         
-        <?php } ?>
+        <?php endif; ?>
 
         <?php echo wp_kses_post( $text ); ?>
 

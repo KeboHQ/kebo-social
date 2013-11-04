@@ -121,9 +121,9 @@ function kebo_se_get_connection( $id = null, $service = null ) {
         if ( is_numeric( $item ) ) {
 
             // Only return first item in array, as we are only fetching one item.
-            $connection = array_slice( $data, $item, 1 )[0];
+            $connection = array_slice( $data, $item, 1 );
             
-            return $connection;
+            return $connection[0];
 
         } else {
 

@@ -438,7 +438,7 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                                     
                                     <a class="social-link twitter" title="Connect to Twitter" href="http://auth.kebopowered.com/kbs_twitter/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-twitter"></i><?php _e('Twitter', 'kbso'); ?></a>
 
-                                    <a class="social-link facebook" title="Connect to Facebook" href="http://auth.kebopowered.com/facebook/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-facebook"></i><?php _e('Facebook', 'kbso'); ?></a>
+                                    <a class="social-link facebook" title="Connect to Facebook" href="http://auth.kebopowered.com/kbs_facebook/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-facebook"></i><?php _e('Facebook', 'kbso'); ?></a>
 
                                     <a class="social-link google" title="Connect to Google" href="http://auth.kebopowered.com/google/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-google-plus"></i><?php _e('Google', 'kbso'); ?></a>
 

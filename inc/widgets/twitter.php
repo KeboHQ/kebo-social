@@ -171,8 +171,6 @@ class Kbso_Twitter_Widget extends WP_Widget {
         
         global $sidebars_widgets;
         
-        //print_r($sidebars_widgets);
-        
         /**
          * We only need the Twitter Intent link js for Tweets.
          */
@@ -200,12 +198,11 @@ class Kbso_Twitter_Widget extends WP_Widget {
         $view = new Kbso_View(
             apply_filters(
                 'kbso_twitter_widget_view_dir',
-                KBSO_PATH . 'views/twitter/tweets',
+                KBSO_PATH . 'views/twitter/tweets/default-light',
                 $widget_id
             )
         );
         
-        $classes[] = 'kebo-tweets';
         $classes[] = 'ktweets';
         $classes[] = $instance['style'];
         $classes[] = $instance['theme'];
@@ -250,6 +247,10 @@ class Kbso_Twitter_Widget extends WP_Widget {
         );
         
         $classes[] = 'kfollowers';
+        $classes[] = $instance['theme'];
+        if ( is_rtl() ) {
+            $classes[] = 'rtl';
+        }
         
         $view
             ->set_view( 'followers' )
@@ -287,6 +288,10 @@ class Kbso_Twitter_Widget extends WP_Widget {
         );
         
         $classes[] = 'kfriends';
+        $classes[] = $instance['theme'];
+        if ( is_rtl() ) {
+            $classes[] = 'rtl';
+        }
             
         $view
             ->set_view( 'friends' )

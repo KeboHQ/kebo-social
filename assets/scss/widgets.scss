@@ -242,18 +242,20 @@ html body .kfollower {
         width: 48px;
         height: 48px;
         transition: opacity 300ms;
+        box-shadow: #000 0em 0em 0em; // fix for FF size changes on hover
 }
+.kfollower:hover img {
+        opacity: 0.7;
+}
+
 @media ( min-width: 768px ) {
     
     html body .kfollower,
     .kfollower img {
-        width: 41px;
-        height: 41px;
+        width: 40px;
+        height: 40px;
     }
     
-}
-.kfollower:hover img {
-        opacity: 0.7;
 }
 
 /* Followers - RTL Support */
@@ -284,18 +286,19 @@ html body .kfriend {
         width: 48px;
         height: 48px;
         transition: opacity 300ms;
+        box-shadow: #000 0em 0em 0em; // fix for FF size changes on hover
+}
+.kfriend:hover img {
+        opacity: 0.7;
 }
 @media ( min-width: 768px ) {
     
     html body .kfriend,
     .kfriend img {
-        width: 41px;
-        height: 41px;
+        width: 40px;
+        height: 40px;
     }
     
-}
-.kfriend:hover img {
-        opacity: 0.7;
 }
 
 /* Friends - RTL Support */
