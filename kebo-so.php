@@ -100,12 +100,6 @@ function kbso_plugin_setup() {
     
     unset( $widgets );
     
-    /*
-     * Include and Activates Updater
-     */
-    require_once( KBSO_PATH . 'inc/updater/wp-updates-plugin.php' );
-    new WPUpdatesPluginUpdater_234( 'http://wp-updates.com/api/2/plugin', plugin_basename(__FILE__) );
-    
 }
 add_action( 'plugins_loaded', 'kbso_plugin_setup', 15 );
 
