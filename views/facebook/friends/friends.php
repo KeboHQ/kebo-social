@@ -20,7 +20,7 @@
 if ( ! empty( $title ) ) {
 
     /**
-     * Already contains: $widget_id, $friends, $instance, $before $before_title, $title, $after_title
+     * Already contains: $widget_id, $friends, $instance, $before, $before_title, $title, $after_title
      */
     $view
         ->set_view( '_title' )
@@ -53,7 +53,7 @@ if ( ! empty( $title ) ) {
     
     ?>
     
-</ul><!-- .ktweets -->
+</ul><!-- .kfriends -->
 
 <?php do_action( 'kbso_after_facebook_friends', $friends, $instance, $widget_id ); ?>
 
