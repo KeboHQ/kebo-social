@@ -362,7 +362,7 @@ class Kbso_Twitter_Widget extends WP_Widget {
                         }
                         
                         ?>
-                        <option value="<?php echo $account['account_id']; ?>"<?php if ( true == $selected ) { echo ' selected="selected"'; } ?>>@<?php echo $account['account_name']; ?></option>
+                        <option value="<?php echo $account['account_id']; ?>" <?php selected( $selected, true ); ?>>@<?php echo $account['account_name']; ?></option>
                         <?php
                         
                     }
@@ -380,9 +380,9 @@ class Kbso_Twitter_Widget extends WP_Widget {
             <p>
                 <?php _e('Type', 'kbso'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('type') ?>" name="<?php echo $this->get_field_name('type'); ?>">
-                    <option value="tweets"<?php if ( 'tweets' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Tweets', 'kbso'); ?></option>
-                    <option value="followers"<?php if ( 'followers' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Followers', 'kbso'); ?></option>
-                    <option value="friends"<?php if ( 'friends' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Friends', 'kbso'); ?></option>
+                    <option value="tweets" <?php selected( $instance['type'], 'tweets' ); ?>><?php _e('Tweets', 'kbso'); ?></option>
+                    <option value="followers" <?php selected( $instance['type'], 'followers' ); ?>><?php _e('Followers', 'kbso'); ?></option>
+                    <option value="friends" <?php selected( $instance['type'], 'friends' ); ?>><?php _e('Friends', 'kbso'); ?></option>
                 </select>
                 <span class="howto"><?php _e('Please choose a type of Widget to see more options.', 'kbso'); ?></span>
             </p>
@@ -394,21 +394,9 @@ class Kbso_Twitter_Widget extends WP_Widget {
             <p>
                 <?php _e('Display', 'kebo_twitter'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('display') ?>" name="<?php echo $this->get_field_name('display'); ?>">
-                    <option value="tweets" <?php
-                    if ('tweets' == $instance['display']) {
-                        echo 'selected="selected"';
-                    }
-                    ?>><?php _e('Tweets', 'kebo_twitter'); ?></option>
-                    <option value="retweets" <?php
-                    if ('retweets' == $instance['display']) {
-                        echo 'selected="selected"';
-                    }
-                    ?>><?php _e('Re-Tweets', 'kebo_twitter'); ?></option>
-                    <option value="all" <?php
-                    if ('all' == $instance['display']) {
-                        echo 'selected="selected"';
-                    }
-                    ?>><?php _e('All Tweets', 'kebo_twitter'); ?></option>
+                    <option value="tweets" <?php selected( $instance['display'], 'tweets' ); ?>><?php _e('Tweets', 'kebo_twitter'); ?></option>
+                    <option value="retweets" <?php selected( $instance['display'], 'retweets' ); ?>><?php _e('Re-Tweets', 'kebo_twitter'); ?></option>
+                    <option value="all" <?php selected( $instance['display'], 'all' ); ?>><?php _e('All Tweets', 'kebo_twitter'); ?></option>
                 </select>
                 <span class="howto">Explanation text</span>
             </p>
@@ -418,8 +406,8 @@ class Kbso_Twitter_Widget extends WP_Widget {
             <p>
                 <?php _e('Style', 'kebo_twitter'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('style') ?>" name="<?php echo $this->get_field_name('style'); ?>">
-                    <option value="list" <?php if ( 'list' == $instance['style'] ) { echo 'selected="selected"'; } ?>><?php _e('List', 'kbso'); ?></option>
-                    <option value="slider" <?php if ( 'slider' == $instance['style'] ) { echo 'selected="selected"'; } ?>><?php _e('Slider', 'kbso'); ?></option>
+                    <option value="list" <?php selected( $instance['style'], 'list' ); ?>><?php _e('List', 'kbso'); ?></option>
+                    <option value="slider" <?php selected( $instance['style'], 'slider' ); ?>><?php _e('Slider', 'kbso'); ?></option>
                 </select>
             </p>
         </label>
@@ -447,27 +435,15 @@ class Kbso_Twitter_Widget extends WP_Widget {
         </label>
 
         <label for="<?php echo $this->get_field_id('avatar'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('avatar'); ?>" id="<?php echo $this->get_field_id('avatar'); ?>" <?php
-                if ('avatar' == $instance['avatar']) {
-                    echo 'checked="checked"';
-                }
-                ?>> <?php _e('Show profile image?', 'kebo_twitter'); ?> </p>
+            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('avatar'); ?>" id="<?php echo $this->get_field_id('avatar'); ?>" <?php selected( $instance['avatar'], 'avatar' ); ?>> <?php _e('Show profile image?', 'kebo_twitter'); ?> </p>
         </label>
 
         <label for="<?php echo $this->get_field_id('conversations'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('conversations'); ?>" id="<?php echo $this->get_field_id('conversations'); ?>" <?php
-                if ('true' == $instance['conversations']) {
-                    echo 'checked="checked"';
-                }
-                ?>> <?php _e('Show conversations?', 'kebo_twitter'); ?> </p>
+            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('conversations'); ?>" id="<?php echo $this->get_field_id('conversations'); ?>" <?php selected( $instance['conversations'], 'true' ); ?>> <?php _e('Show conversations?', 'kebo_twitter'); ?> </p>
         </label>
 
         <label for="<?php echo $this->get_field_id('media'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('media'); ?>" id="<?php echo $this->get_field_id('media'); ?>" <?php
-                      if ('true' == $instance['media']) {
-                          echo 'checked="checked"';
-                      }
-                      ?>> <?php _e('Show media? (only Lists)', 'kebo_twitter'); ?> </p>
+            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('media'); ?>" id="<?php echo $this->get_field_id('media'); ?>" <?php selected( $instance['media'], 'true' ); ?>> <?php _e('Show media? (only Lists)', 'kebo_twitter'); ?> </p>
         </label>
             
         </div>
