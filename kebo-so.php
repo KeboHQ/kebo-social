@@ -24,7 +24,7 @@ define( 'KBSO_API_URL', 'http://auth.kebopowered.com/request/request.php' );
  */
 function kbso_load_textdomain() {
     
-    load_plugin_textdomain( 'kbso', false, KEBO_SE_PATH . '/languages' );
+    load_plugin_textdomain( 'kbso', false, KBSO_PATH . '/languages' );
     
 }
 add_filter( 'wp_loaded', 'kbso_load_textdomain' );
@@ -54,6 +54,11 @@ if ( version_compare( PHP_VERSION, '5.2', '<' ) ) {
 function kbso_plugin_setup() {
 
     /*
+     * Include Options.
+     */
+    require_once( KBSO_PATH . 'inc/options.php' );
+    
+    /*
      * Include Menu page.
      */
     require_once( KBSO_PATH . 'inc/menu.php' );
@@ -62,11 +67,6 @@ function kbso_plugin_setup() {
      * Include oAuth Connection Functions.
      */
     require_once( KBSO_PATH . 'inc/connections.php' );
-    
-    /*
-     * Include Visitor Statistic Functions.
-     */
-    require_once( KBSO_PATH . 'inc/stats.php' );
     
     /*
      * Include AJAX Functions.
@@ -127,52 +127,52 @@ if ( ! function_exists( 'kbso_register_files' ) ) :
     
 endif;
     
-    /**
-     * Enqueue frontend plugin scripts and styles.
-     */
-    function kbso_enqueue_frontend() {
+/**
+ * Enqueue frontend plugin scripts and styles.
+ */
+function kbso_enqueue_frontend() {
 
-        // Register Styles
+    // Register Styles
         
         
-    }
-    add_action('wp_enqueue_scripts', 'kbso_enqueue_frontend');
+}
+add_action('wp_enqueue_scripts', 'kbso_enqueue_frontend');
     
-    /**
-     * Enqueue backend plugin scripts and styles.
-     */
-    function kbso_enqueue_backend( $hook_suffix ) {
+/**
+ * Enqueue backend plugin scripts and styles.
+ */
+function kbso_enqueue_backend( $hook_suffix ) {
         
-        // Enqueue on all pages
-        wp_enqueue_style( 'kbso-admin-css' );
+    // Enqueue on all pages
+    wp_enqueue_style( 'kbso-admin-css' );
         
-        // Enqueue files for dashboard page
-        if ( 'toplevel_page_kbso-dashboard' == $hook_suffix ) {
+    // Enqueue files for dashboard page
+    if ( 'toplevel_page_kbso-dashboard' == $hook_suffix ) {
             
-            wp_enqueue_script( 'kbso-flot-js' );
-            wp_enqueue_script( 'kbso-flot-cats-js' );
-            wp_enqueue_script( 'kbso-flot-resize-js' );
-            wp_enqueue_script( 'kbso-flot-pie-js' );
-            wp_enqueue_script( 'jquery-ui-sortable' );
+        wp_enqueue_script( 'kbso-flot-js' );
+        wp_enqueue_script( 'kbso-flot-cats-js' );
+        wp_enqueue_script( 'kbso-flot-resize-js' );
+        wp_enqueue_script( 'kbso-flot-pie-js' );
+        wp_enqueue_script( 'jquery-ui-sortable' );
             
-        }
-        
-        // Enqueue files for connections page
-        if ( 'kebo-social_page_kbso-connections' == $hook_suffix ) {
-            
-            wp_enqueue_script( 'kbso-admin-js' );
-            
-        }
-        
-        // Enqueue files for sharing page
-        if ( 'kebo-social_page_kbso-sharing' == $hook_suffix ) {
-            
-            wp_enqueue_script( 'jquery-ui-sortable' );
-            
-        }
-        
     }
-    add_action( 'admin_enqueue_scripts', 'kbso_enqueue_backend' );
+        
+    // Enqueue files for connections page
+    if ( 'kebo-social_page_kbso-connections' == $hook_suffix ) {
+            
+        wp_enqueue_script( 'kbso-admin-js' );
+            
+    }
+        
+    // Enqueue files for sharing page
+    if ( 'kebo-social_page_kbso-sharing' == $hook_suffix ) {
+            
+        wp_enqueue_script( 'jquery-ui-sortable' );
+            
+    }
+        
+}
+add_action( 'admin_enqueue_scripts', 'kbso_enqueue_backend' );
 
 /**
  * Add a link to the plugin screen, to allow users to jump straight to the settings page.
