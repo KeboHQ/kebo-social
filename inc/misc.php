@@ -3,6 +3,44 @@
  * Misc functions.
  */
 
+/**
+ * Facebook Functions
+ */
+
+/*
+ * Returns Status date formatted for Display
+ */
+if ( ! function_exists( 'kbso_status_display_date' ) ) {
+
+    function kbso_status_display_date( $status ) {
+
+        $format = get_option( 'date_format' );
+        
+        $date = $status['updated_time'];
+        
+        // Prepare Date Formats
+        if ( date('Ymd') == date( 'Ymd', strtotime( $date ) ) ) {
+
+            // Covert created at date into timeago format
+            $display_date = human_time_diff( date( 'U', strtotime( $date ) ), current_time( 'timestamp', $gmt = 1 ) );
+            
+        } else {
+
+            // Convert created at date into easily readable format.
+            $display_date = date_i18n( $format, strtotime( $date ) );
+            
+        }
+        
+        return $display_date;
+        
+    }
+
+}
+
+/**
+ * Twitter Functions
+ */
+
 /*
  * Returns Tweet date formatted for Display
  */
