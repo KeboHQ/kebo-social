@@ -53,8 +53,7 @@ class Kbso_Facebook_Widget extends WP_Widget {
     public $default_options = array(
         'accounts' => null,
         'title' => null,
-        'type' => 'tweets',
-        'display' => 'tweets',
+        'type' => 'statuses',
         'style' => 'list',
         'theme' => 'light',
         'conversations' => false,
@@ -86,12 +85,12 @@ class Kbso_Facebook_Widget extends WP_Widget {
 
         $widget_ops = array(
             'classname' => 'kbso_facebook_widget',
-            'description' => __( 'Displays many types of Facebook data.', 'kbso' )
+            'description' => __('Displays many types of Facebook data.', 'kbso')
         );
 
         $this->WP_Widget(
             false,
-            __( 'Kebo Social - Facebook', 'kbso' ),
+            __('Kebo Social - Facebook', 'kbso'),
             $widget_ops
         );
         
@@ -108,7 +107,6 @@ class Kbso_Facebook_Widget extends WP_Widget {
         
         $service = 'facebook';
         $type = $instance['type'];
-        $type = 'friends';
         $accounts = array();
         
         //wp_enqueue_style( 'kebo-twitter-plugin' );
@@ -138,23 +136,19 @@ class Kbso_Facebook_Widget extends WP_Widget {
             /**
              * Check which type of Widget we need to output
              */
-            if ( 'followers' == $instance['type'] ) {
-            
-                $this->output_followers( $instance, $data, $args );
-            
-            } elseif ( 'friends' == $instance['type'] ) {
+            if ( 'friends' == $instance['type'] ) {
                 
                 $this->output_friends( $instance, $data, $args );
                 
             } else {
                 
-                $this->output_tweets( $instance, $data, $args );
+                $this->output_statuses( $instance, $data, $args );
                 
             }
         
         } else {
             
-            _e( 'You must select an account to begin showing Tweets.', 'kbso' );
+            _e('You must select an account to begin showing Facebook data.', 'kbso');
             return;
             
         }
@@ -185,6 +179,9 @@ class Kbso_Facebook_Widget extends WP_Widget {
             )
         );
         
+        /**
+         * Prepare the HTML classes
+         */
         $classes[] = 'kfriends';
         $classes[] = $instance['theme'];
         if ( is_rtl() ) {
@@ -195,6 +192,50 @@ class Kbso_Facebook_Widget extends WP_Widget {
             ->set_view( 'friends' )
             ->set( 'widget_id', $widget_id )
             ->set( 'friends', $friends )
+            ->set( 'classes', $classes )
+            ->set( 'instance', $instance )
+            ->set( 'before_widget', $before_widget )
+            ->set( 'before_title', $before_title )
+            ->set( 'title', $instance['title'] )
+            ->set( 'after_title', $after_title )
+            ->set( 'after_widget', $after_widget )
+            ->set( 'view', $view )
+            ->render();
+        
+    }
+    
+    /**
+     * Outputs Statuses
+     */
+    function output_statuses( $instance, $statuses, $args ) {
+        
+        extract( $args, EXTR_SKIP );
+        
+        /**
+         * Setup an instance of the View class.
+         * Allow customization using a filter.
+         */
+        $view = new Kbso_View(
+            apply_filters(
+                'kbso_facebook_widget_view_dir',
+                KBSO_PATH . 'views/facebook/statuses',
+                $widget_id
+            )
+        );
+        
+        /**
+         * Prepare the HTML classes
+         */
+        $classes[] = 'kstatuses';
+        $classes[] = $instance['theme'];
+        if ( is_rtl() ) {
+            $classes[] = 'rtl';
+        }
+            
+        $view
+            ->set_view( 'statuses' )
+            ->set( 'widget_id', $widget_id )
+            ->set( 'statuses', $statuses )
             ->set( 'classes', $classes )
             ->set( 'instance', $instance )
             ->set( 'before_widget', $before_widget )
@@ -278,8 +319,7 @@ class Kbso_Facebook_Widget extends WP_Widget {
             <p>
                 <?php _e('Type', 'kbso'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('type') ?>" name="<?php echo $this->get_field_name('type'); ?>">
-                    <option value="tweets"<?php if ( 'tweets' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Tweets', 'kbso'); ?></option>
-                    <option value="followers"<?php if ( 'followers' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Followers', 'kbso'); ?></option>
+                    <option value="statuses"<?php if ( 'statuses' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Statuses', 'kbso'); ?></option>
                     <option value="friends"<?php if ( 'friends' == $instance['type'] ) { echo ' selected="selected"'; } ?>><?php _e('Friends', 'kbso'); ?></option>
                 </select>
                 <span class="howto"><?php _e('Please choose a type of Widget to see more options.', 'kbso'); ?></span>
