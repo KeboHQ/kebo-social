@@ -49,7 +49,7 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                 __('Sharing', 'kbso'), // Name of Page
                 __('Sharing', 'kbso'), // Label in Menu
                 'manage_options', // Capability Required
-                'kbso-sharing', // Menu Slug, used to uniquely identify the page
+                'kbso_sharing', // Menu Slug, used to uniquely identify the page
                 'kbso_sharing_page' // Function that renders the options page
         );
         
@@ -58,8 +58,8 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
 
     function kbso_dashboard_page() {
         
-        if (!current_user_can('manage_options')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
         
         /*
@@ -73,260 +73,27 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
             <h2><?php _e( 'Kebo Social - Dashboard', 'kbso' ); ?></h2>
             <?php settings_errors(); ?>
             
-            <p>This is your Kebo SE Dashboard.</p>
+            <p><?php _e('This is your Kebo SE Dashboard.' , 'kbso'); ?></p>
 
             <div id="kebo-wrap" class="kebo-dash kebo" data-user_id="<?php echo get_current_user_id(); ?>">
 
+                <div class="row">
+
+                    <div id="main-panel" class="small-12 large-12 columns">
+                        
+                        
+                            
+                    </div><!-- .small-12 .large-12 .columns -->
+                        
+                </div><!-- .row -->
+                
                 <div class="row">
 
                     <div id="sort1" class="small-12 large-6 columns">
                         
                         <?php do_action( 'kbso_dashboard_col', 1 ); ?>
                         
-                            <?php 
-                            global $wpdb;
-                            $custom_query = $wpdb->get_results( "SELECT DATE(time) AS date, count(Distinct user_hash) AS visits FROM {$wpdb->prefix}kebo_se_stats GROUP BY DATE(time)" );
-                            ?>
                             
-                            <script type="text/javascript">
-
-                            jQuery( document ).ready(function() {
-                            
-                                var data = [ ["Monday", 10], ["Tuesday", 8], ["Wednesday", 4], ["Thursday", 13], ["Friday", 17], ["Saturday", 9], ["Sunday", 7] ];
-
-                                jQuery.plot("#placeholder", [ data ], {
-                                        series: {
-                                                bars: {
-                                                        show: true,
-                                                        barWidth: 0.7,
-                                                        align: "center"
-                                                }
-                                        },
-                                        xaxis: {
-                                                mode: "categories",
-                                                tickLength: 0
-                                        }
-                                });
-
-                            });
-
-                            </script>
-                            
-                        <script type="text/javascript">
-                            
-                             jQuery( document ).ready(function() {
-                                 
-                                 jQuery( '.dashboard-box .dash-header' ).bind( 'mouseup', function(e) {
-                                     
-                                    var parent = jQuery(this).parent('.dashboard-box');
-
-                                    if ( parent.is('.ui-sortable-helper') ) {
-                                        return;
-                                    }
-
-                                    if ( parent.hasClass('closed') ) {
-
-                                        parent.removeClass('closed');
-                                        parent.children('.dash-content').eq(0).stop(true, true).fadeIn( 1000 );
-
-                                    } else {
-
-                                        parent.addClass('closed');
-                                        parent.children('.dash-content').eq(0).stop(true, true).fadeOut( 100 );
-
-                                    };
-                                    
-                                    // do AJAX config save
-                                    var korder = new Array;
-                                    korder.push({
-                                        col1 : [], 
-                                        col2 : []
-                                    });
-                                    var kclosed;
-                                    var kuser_id = jQuery('#kebo-wrap').data('user_id');
-                                            
-                                    jQuery( '#sort1 .dashboard-box' ).each( function( index ) {
-                                                
-                                        var kslug = jQuery(this).data( 'slug' );
-                                                
-                                        if ( jQuery(this).hasClass( 'closed' ) ) {
-                                                    
-                                            kclosed = 1;
-
-                                        } else {
-
-                                            kclosed = 0;
-
-                                        }
-                                                
-                                        // Add data to array
-                                        korder[0].col1.push( [kslug, kclosed] );
-                                                
-                                    });
-                                            
-                                    jQuery( '#sort2 .dashboard-box' ).each( function( index ) {
-                                                
-                                        var kslug = jQuery(this).data( 'slug' );
-                                                
-                                        if ( jQuery(this).hasClass( 'closed' ) ) {
-                                                    
-                                            kclosed = 1;
-
-                                        } else {
-
-                                            kclosed = 0;
-
-                                        }
-                                                
-                                        // Add data to array
-                                        korder[0].col2.push( [kslug, kclosed] );
-                                                
-                                    });
-                                            
-                                    var data = {
-                                        action: 'kebo_se_save_dashboard_config',
-                                        data: korder,
-                                        user_id: kuser_id,
-                                        nonce: '<?php echo wp_create_nonce( 'kebo_se_dash_config' ); ?>'
-                                    };
-                                            
-                                    // do AJAX update
-                                    jQuery.post( ajaxurl, data, function( response ) {
-                                                
-                                        response = jQuery.parseJSON( response );
-
-                                        if ( 'true' === response.success && 'save' === response.action && window.console) {
-                                            console.log('Kebo Social - Dashboard configuration successfully saved.');
-                                        }
-
-                                    });
-                                     
-                                 });
-                                 
-                             });
-                            
-                        </script>
-                        
-                        <script type="text/javascript">
-                                
-                                jQuery( document ).ready(function() {
-                                    
-                                    jQuery( "#sort1, #sort2" ).sortable({
-                                        
-                                        connectWith: ".columns",
-                                        placeholder: "sortable-placeholder",
-                                        dropOnEmpty: true,
-                                        start: function( event, ui ) {
-                                            
-                                            ui.placeholder.height( 34 );
-                                            ui.placeholder.width( ui.helper.outerWidth() -2 );
-                                            
-                                            ui.item.children('.dash-content').eq(0).stop(true, true).fadeOut( 100 );
-                                            
-                                        },
-                                        stop: function( event, ui ) {
-                                            
-                                            ui.item.children('.dash-content').eq(0).stop(true, true).fadeIn( 1000 );
-                                            
-                                            var korder = new Array;
-                                            korder.push({
-                                                col1 : [], 
-                                                col2 : []
-                                            });
-                                            var kclosed;
-                                            var kuser_id = jQuery('#kebo-wrap').data('user_id');
-                                            
-                                            jQuery( '#sort1 .dashboard-box' ).each( function( index ) {
-                                                
-                                                var kslug = jQuery(this).data( 'slug' );
-                                                
-                                                if ( jQuery(this).hasClass( 'closed' ) ) {
-                                                    
-                                                    kclosed = 1;
-
-                                                } else {
-
-                                                    kclosed = 0;
-
-                                                }
-                                                
-                                                // Add data to array
-                                                korder[0].col1.push( [kslug, kclosed] );
-                                                
-                                            });
-                                            
-                                            jQuery( '#sort2 .dashboard-box' ).each( function( index ) {
-                                                
-                                                var kslug = jQuery(this).data( 'slug' );
-                                                
-                                                if ( jQuery(this).hasClass( 'closed' ) ) {
-                                                    
-                                                    kclosed = 1;
-                                                    
-                                                } else {
-                                                    
-                                                    kclosed = 0;
-                                                    
-                                                }
-                                                
-                                                // Add data to array
-                                                korder[0].col2.push( [kslug, kclosed] );
-                                                
-                                            });
-                                            
-                                            var data = {
-                                                action: 'kebo_se_save_dashboard_config',
-                                                data: korder,
-                                                user_id: kuser_id,
-                                                nonce: '<?php echo wp_create_nonce( 'kebo_se_dash_config' ); ?>'
-                                            };
-                                            
-                                            // do AJAX update
-                                            jQuery.post( ajaxurl, data, function( response ) {
-                                                
-                                                response = jQuery.parseJSON( response );
-
-                                                if ( 'true' === response.success && 'save' === response.action && window.console ) {
-                                                    console.log( 'Kebo Social - Dashboard configuration successfully saved.' );
-                                                }
-
-                                            });
-                                            
-                                        }
-                                        
-                                    }).disableSelection();
-                                    
-                                });
-                                
-                        </script>
-                            
-                        <?php 
-                        global $wpdb;
-                        $custom_query3 = $wpdb->get_results( "SELECT COUNT(is_mobile) AS mobile FROM {$wpdb->prefix}kebo_se_stats WHERE is_mobile = 'true' UNION SELECT COUNT(is_mobile) AS mobile FROM {$wpdb->prefix}kebo_se_stats WHERE is_mobile = 'false'" );
-                        ?>
-
-                        <script type="text/javascript">
-
-                            jQuery( document ).ready(function() {
-                                
-                                var data2 = [
-                                    { label: "Mobile",  data: <?php echo $custom_query3[0]->mobile; ?>},
-                                    { label: "Non Mobile",  data: <?php echo $custom_query3[1]->mobile; ?>}
-                                ];
-                                
-                                jQuery.plot('#device-usage', data2, {
-                                    series: {
-                                        pie: {
-                                            show: true,
-                                            radius: 1,
-                                            innerRadius: 0.5
-                                        }
-                                    }
-                                });
-                                
-                            });
-
-                        </script>
                             
                     </div><!-- .small-12 .large-6 .columns -->
                     
@@ -334,43 +101,7 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                         
                         <?php do_action( 'kbso_dashboard_col', 2 ); ?>
                         
-                        <?php 
-                        global $wpdb;
-                        $custom_query2 = $wpdb->get_results( "SELECT browser_name, count(browser_name) AS total FROM {$wpdb->prefix}kebo_se_stats GROUP BY browser_name" );
                         
-                        $colors = array(
-                            '#0aa5d4',
-                            '#fc9c41',
-                            '#c274f9',
-                            '#6bdc70',
-                            '#ff6565',
-                        );
-                        
-                        ?>
-
-                        <script type="text/javascript">
-
-                            jQuery( document ).ready(function() {
-                                
-                                var data1 = [
-                                    <?php foreach( $custom_query2 as $browser ) { ?>
-                                    { label: "<?php echo $browser->browser_name; ?>",  data: <?php echo $browser->total; ?>}<?php if ( $browser !== end($custom_query2)) { echo ','; } ?>
-                                    <?php } ?>
-                                ];
-                                
-                                jQuery.plot('#browser-usage', data1, {
-                                    series: {
-                                        pie: {
-                                            show: true,
-                                            radius: 1,
-                                            innerRadius: 0.5
-                                        }
-                                    }
-                                });
-                                
-                            });
-
-                        </script>
                             
                     </div><!-- .small-12 .large-6 .columns -->
                         
@@ -385,8 +116,8 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
 
         function kbso_connections_page() {
             
-            if (!current_user_can('edit_others_posts')) {
-                wp_die(__('You do not have sufficient permissions to access this page.'));
+            if ( ! current_user_can( 'edit_others_posts' ) ) {
+                wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
             }
             
             ?>
@@ -468,17 +199,16 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
         
         function kbso_sharing_page() {
             
-            if ( !current_user_can('manage_options')) {
-                wp_die(__('You do not have sufficient permissions to access this page.'));
+            if ( ! current_user_can( 'manage_options' ) ) {
+                wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
             }
             
             ?>
             
             <div class="wrap">
-                <h2>Kebo Social - Sharing</h2>
-                <?php settings_errors(); ?>
+                <h2><?php _e( 'Kebo Social - Sharing', 'kbso' ); ?></h2>
                 
-                <p>This the the sharing page.</p>
+                <p><?php _e( 'This the the sharing page.', 'kbso' ); ?></p>
 
                 <div class="kebo-wrap kebo">
 
@@ -486,7 +216,7 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
 
                         <div id="sort-container" class="small-12 large-12 columns">
 
-                            <h3 class="title"><?php _e('Social Share Links', 'kebo-se'); ?></h3>
+                            <h3 class="title"><?php _e( 'Social Share Links', 'kbso' ); ?></h3>
                             
                             <p>These are the links available which help your blog visitors to share your work across the internet. Move the relevant buttons into the box below to display them on your site.</p>
                             
@@ -507,7 +237,7 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                             
                             <div class="panel">
 
-                                <ul id="share-links-selected" class="connectedSortable Sortable">
+                                <ul id="share-links-selected" class="connectedSortable Sortable" style="min-height: 40px;">
                                     
                                 </ul>
 
@@ -543,8 +273,18 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                         </div><!-- .small-12 .large-12 .columns -->
 
                         <div class="small-12 large-12 columns">
+                            
+                            <?php settings_errors(); ?>
 
-                            <h3 class="title"><?php _e('Options', 'kebo-se'); ?></h3>
+                            <form method="post" action="options.php">
+                                <?php
+                                settings_fields( 'kbso_options' );
+                                do_settings_sections( 'kbso_sharing' );
+                                submit_button();
+                                $options = kbso_get_plugin_options();
+                                print_r( $options );
+                                ?>
+                            </form>
 
                             <p></p>
                             
