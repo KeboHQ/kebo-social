@@ -3,6 +3,11 @@
  * Kebo Plugin CP Menu Code.
  */
 
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
+
 if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_dashboard_page' ) && ! function_exists( 'kebo_se_connections_page' ) && ! function_exists( 'kebo_se_sharing_page' ) ):
 
     function kbso_plugin_menu() {

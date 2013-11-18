@@ -3,6 +3,11 @@
  * Connects to the Kebo OAuth script.
  */
 
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
+
 if ( ! class_exists( 'KeboSE_OAuth' ) ) :
 
     class KeboSE_OAuth {

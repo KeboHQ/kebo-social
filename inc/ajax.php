@@ -3,6 +3,11 @@
  * Contains all AJAX functions.
  */
 
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
+
 /*
  * AJAX Save Dashboard Positions
  */

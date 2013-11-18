@@ -3,6 +3,11 @@
  * Class to handle Flot Graphs - http://www.flotcharts.org
  */
 
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
+
 if ( ! class_exists('KeboSE_Graphs')) :
 
     class KeboSE_Graphs {

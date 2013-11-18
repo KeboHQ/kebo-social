@@ -1,8 +1,12 @@
 <?php
-
 /*
  * Class to handle Social API requests.
  */
+
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
 
 if ( ! class_exists( 'Kbso_Api' ) ) {
 
@@ -193,7 +197,12 @@ if ( ! class_exists( 'Kbso_Api' ) ) {
                     
                     } elseif ( 'facebook' == $this->service ) {
                         
-                        if ( 'friends' == $this->type ) {
+                        if ( 'statuses' == $this->type ) {
+                            
+                            // Add Social Data Together
+                            $combined_data = array_merge( $combined_data, $data['data'] );
+                            
+                        } elseif ( 'friends' == $this->type ) {
                             
                             // Add Social Data Together
                             $combined_data = array_merge( $combined_data, $data['data'] );

@@ -4,6 +4,11 @@
  * Supports...
  */
 
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
+
 /**
  * Check a Facebook account exists.
  */
@@ -12,8 +17,8 @@ $connections = get_option( 'kebo_se_connections' );
 $found = false;
 
 /**
- * Search each connection looking for a twitter account.
- * We don't need to activate the Widget if there is no Twitter account.
+ * Search each connection looking for a Facebook account.
+ * We don't need to activate the Widget if there is no Facebook account.
  */
 foreach ( $connections as $connection ) {
 

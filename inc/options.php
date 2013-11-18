@@ -3,6 +3,11 @@
  * Options Page
  */
 
+if ( ! defined( 'KBSO_VERSION' ) ) {
+    header( 'HTTP/1.0 403 Forbidden' );
+    die;
+}
+
 /**
  * Register the form setting for our kebo_options array.
  */
@@ -168,14 +173,14 @@ function kbso_options_render_post_type_checkboxes( $args ) {
     $args = array(
         'public' => true,
     );
-    $post_types = get_post_types( $args );
+    $post_types = get_post_types( $args, 'objects' );
     
     foreach ( $post_types as $post_type ) {
         
         ?>
-        <label for="<?php echo $name; ?>[<?php echo $post_type; ?>]">
-        <?php echo esc_html( ucfirst( $post_type ) ); ?>
-        <input type="checkbox" id="<?php echo $name; ?>[<?php echo $post_type; ?>]" name="kbso_plugin_options[<?php echo $name; ?>][]" value="<?php echo $post_type; ?>" <?php checked( $post_type, $options[ $name ] ); ?> />
+        <label for="<?php echo $name; ?>[<?php echo $post_type->name; ?>]">
+        <?php echo esc_html( $post_type->labels->name ); ?>
+        <input type="checkbox" id="<?php echo $name; ?>[<?php echo $post_type->name; ?>]" name="kbso_plugin_options[<?php echo $name; ?>][]" value="<?php echo $post_type->name; ?>" <?php checked( $post_type->name, $options[ $name ] ); ?> />
         </label>
         <?php
         
