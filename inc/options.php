@@ -26,34 +26,40 @@ function kbso_plugin_options_init() {
      * Section - Share Links
      */
     add_settings_section(
-            'kbso_share_links', // Unique identifier for the settings section
-            __('Share Link Options', 'kbso'), // Section title
+            'kbso_share_links_general', // Unique identifier for the settings section
+            __('General Options', 'kbso'), // Section title
             '__return_false', // Section callback (we don't want anything)
-            'kbso_sharing' // Menu slug
+            'kbso-sharing' // Menu slug
+    );
+    
+    /**
+     * Field - Activate Feature
+     */
+    add_settings_field(
+            'share_links_activate_feature', // Unique identifier for the field for this section
+            __('Activate Feature', 'kbso'), // Setting field label
+            'kbso_options_render_switch', // Function that renders the settings field
+            'kbso-sharing', // Menu slug
+            'kbso_share_links_general', // Settings section.
+            array( // Args to pass to render function
+                'name' => 'share_links_activate_feature',
+                'help_text' => __('Turns the feature on or off.', 'kbso')
+            ) 
     );
     
     /**
      * Field - Text Intro
      */
     add_settings_field(
-            'share_links_text_intro', // Unique identifier for the field for this section
+            'share_links_intro_text', // Unique identifier for the field for this section
             __('Intro Text', 'kbso'), // Setting field label
             'kbso_options_render_text_input', // Function that renders the settings field
-            'kbso_sharing', // Menu slug
-            'kbso_share_links', // Settings section.
-            array( 'name' => 'share_links_text_intro' ) // Args to pass to render function
-    );
-    
-    /**
-     * Field - Post Types
-     */
-    add_settings_field(
-            'share_links_link_display', // Unique identifier for the field for this section
-            __('Link Display', 'kbso'), // Setting field label
-            'kbso_options_render_radio_buttons', // Function that renders the settings field
-            'kbso_sharing', // Menu slug
-            'kbso_share_links', // Settings section.
-            array( 'name' => 'share_links_link_display' ) // Args to pass to render function
+            'kbso-sharing', // Menu slug
+            'kbso_share_links_general', // Settings section.
+            array( // Args to pass to render function
+                'name' => 'share_links_intro_text',
+                'help_text' => __('Text to display before the Share Links.', 'kbso')
+            )
     );
     
     /**
@@ -63,9 +69,46 @@ function kbso_plugin_options_init() {
             'share_links_post_types', // Unique identifier for the field for this section
             __('Post Types', 'kbso'), // Setting field label
             'kbso_options_render_post_type_checkboxes', // Function that renders the settings field
-            'kbso_sharing', // Menu slug
-            'kbso_share_links', // Settings section.
+            'kbso-sharing', // Menu slug
+            'kbso_share_links_general', // Settings section.
             array( 'name' => 'share_links_post_types' ) // Args to pass to render function
+    );
+    
+    /**
+     * Section - Share Links
+     */
+    add_settings_section(
+            'kbso_share_links_visual', // Unique identifier for the settings section
+            __('Visual Options', 'kbso'), // Section title
+            '__return_false', // Section callback (we don't want anything)
+            'kbso-sharing' // Menu slug
+    );
+    
+    /**
+     * Field - Post Types
+     */
+    add_settings_field(
+            'share_links_link_content', // Unique identifier for the field for this section
+            __('Link Content', 'kbso'), // Setting field label
+            'kbso_options_render_link_content', // Function that renders the settings field
+            'kbso-sharing', // Menu slug
+            'kbso_share_links_visual', // Settings section.
+            array( // Args to pass to render function
+                'name' => 'share_links_link_content',
+                'help_text' => __('Choose which parts of the Share Link you want visible. One of icon and name are required.', 'kbso')
+            )
+    );
+    
+    /**
+     * Field - Theme
+     */
+    add_settings_field(
+            'share_links_theme', // Unique identifier for the field for this section
+            __('Theme', 'kbso'), // Setting field label
+            'kbso_options_render_theme_dropdown', // Function that renders the settings field
+            'kbso-sharing', // Menu slug
+            'kbso_share_links_visual', // Settings section.
+            array( 'name' => 'share_links_theme' ) // Args to pass to render function
     );
 
 }
@@ -89,9 +132,12 @@ function kbso_get_plugin_options() {
     $saved = (array) get_option( 'kbso_plugin_options' );
     
     $defaults = array(
-        // Section - Share Links
-        'share_links_text_intro' => null,
-        'share_links_link_display' => true,
+        // Section - Share Links - General
+        'share_links_activate_feature' => 'no',
+        'share_links_intro_text' => null,
+        // Section - Share Links - Visual
+        'share_links_link_content' => array( 'icon', 'name', 'count' ),
+        'share_links_theme' => 'default',
         'share_links_post_types' => array( 'post' ),
     );
 
@@ -104,6 +150,33 @@ function kbso_get_plugin_options() {
     
 }
 
+function kbso_options_render_switch( $args ) {
+    
+    $options = kbso_get_plugin_options();
+    
+    $name = esc_attr( $args['name'] );
+    
+    $help_text = ( $args['help_text'] ) ? esc_html( $args['help_text'] ) : null;
+    
+    ?>
+    <div class="switch options">
+    <?php
+    foreach ( kbso_options_radio_buttons() as $button ) {
+    $counter++;
+    ?>
+        <input id="x<?php echo $counter; ?>" type="radio" name="kbso_plugin_options[<?php echo $name; ?>]" value="<?php echo esc_attr( $button['value'] ); ?>" <?php checked( $options[ $name ], $button['value'] ); ?> />
+        <label for="x<?php echo $counter; ?>"><?php echo $button['label']; ?></label>
+    <?php
+    }
+    ?>
+    <span></span>
+    </div>
+    <?php if ( $help_text ) { ?>
+        <span class="howto"><?php echo esc_html( $help_text ); ?></span>
+    <?php } ?>
+    <?php
+}
+
 /**
  * Renders the text input setting field.
  */
@@ -112,12 +185,16 @@ function kbso_options_render_text_input( $args ) {
     $options = kbso_get_plugin_options();
     
     $name = esc_attr( $args['name'] );
+    
+    $help_text = ( $args['help_text'] ) ? esc_html( $args['help_text'] ) : null;
         
     ?>
     <label class="description" for="<?php echo $name; ?>">
     <input type="text" name="kbso_plugin_options[<?php echo $name; ?>]" id="<?php echo $name; ?>" value="<?php echo esc_attr( $options[ $name ] ); ?>" />
-    <?php esc_html_e( 'Share Text', 'kbso' ); ?>
     </label>
+    <?php if ( $help_text ) { ?>
+        <span class="howto"><?php echo esc_html( $help_text ); ?></span>
+    <?php } ?>
     <?php
         
 }
@@ -138,27 +215,110 @@ function kbso_options_radio_buttons() {
         ),
     );
 
-    return apply_filters('kbso_options_radio_buttons', $radio_buttons);
+    return apply_filters( 'kbso_options_radio_buttons', $radio_buttons );
+    
+}
+
+/**
+ * Returns an array of radio options for Yes/No.
+ */
+function kbso_options_link_content_options() {
+    
+    $check_boxes = array(
+        'icon' => array(
+            'value' => 'icon',
+            'label' => __('Icon', 'kbso')
+        ),
+        'name' => array(
+            'value' => 'name',
+            'label' => __('Name', 'kbso')
+        ),
+        'count' => array(
+            'value' => 'count',
+            'label' => __('Count', 'kbso')
+        ),
+    );
+
+    return apply_filters( 'kbso_options_link_content_options', $check_boxes );
     
 }
 
 /**
  * Renders the radio options setting field.
  */
-function kbso_options_render_radio_buttons( $args ) {
+function kbso_options_render_link_content( $args ) {
     
-	$options = kbso_get_plugin_options();
+    $options = kbso_get_plugin_options();
+    
+    $name = esc_attr( $args['name'] );
+    
+    $help_text = ( $args['help_text'] ) ? esc_html( $args['help_text'] ) : null;
+    
+    foreach ( kbso_options_link_content_options() as $checkbox ) {
         
-        $name = esc_attr( $args['name'] );
+        ?>
+        <label for="<?php echo $name; ?>[<?php echo $checkbox['value']; ?>]">
+        <input type="checkbox" id="<?php echo $name; ?>[<?php echo $checkbox['value']; ?>]" name="kbso_plugin_options[<?php echo $name; ?>][]" value="<?php echo $checkbox['value']; ?>" <?php checked( true, in_array( $checkbox['value'], $options[ $name ] ) ); ?> />
+        <?php echo esc_html( $checkbox['label'] ); ?>
+        </label>
+        <?php
+        
+    }
+    if ( $help_text ) { ?>
+        <span class="howto"><?php echo esc_html( $help_text ); ?></span>
+    <?php }
+    
+}
 
-	foreach ( kbso_options_radio_buttons() as $button ) {
-	?>
-	<label for="<?php echo $name; ?>">
-            <input type="radio" name="kbso_plugin_options[<?php echo $name; ?>]" id="<?php echo $name; ?>" value="<?php echo esc_attr( $button['value'] ); ?>" <?php checked( $options[ $name ], $button['value'] ); ?> />
-            <?php echo $button['label']; ?>
-	</label>
-	<?php
-	}
+/**
+ * Returns an array of select inputs for the Theme dropdown.
+ */
+function kbso_options_theme_select_dropdown() {
+    
+    $dropdown = array(
+        'default' => array(
+            'value' => 'default',
+            'label' => __('Default', 'kbso')
+        ),
+        'flat' => array(
+            'value' => 'flat',
+            'label' => __('Flat', 'kbso')
+        ),
+        'gradient' => array(
+            'value' => 'gradient',
+            'label' => __('Gradient', 'kbso')
+        ),
+    );
+
+    return apply_filters( 'kbso_options_theme_dropdown', $dropdown );
+    
+}
+
+/**
+ * Renders the Theme dropdown.
+ */
+function kbso_options_render_theme_dropdown( $args ) {
+    
+    $options = kbso_get_plugin_options();
+    
+    $name = esc_attr( $args['name'] );
+    
+    ?>
+    <select id="<?php echo $name; ?>[<?php echo $dropdown['value']; ?>]" name="kbso_plugin_options[<?php echo $name; ?>]">
+    <?php
+    foreach ( kbso_options_theme_select_dropdown() as $dropdown ) {
+        
+        ?>
+        <option value="<?php echo esc_attr( $dropdown['value'] ); ?>" <?php selected( $dropdown['value'], $options[ $name ] ); ?>>
+            <?php echo esc_html( $dropdown['label'] ); ?>
+        </option>
+        <?php
+        
+    }
+    ?>
+    </select>    
+    <?php
+        
 }
 
 /**
@@ -179,8 +339,8 @@ function kbso_options_render_post_type_checkboxes( $args ) {
         
         ?>
         <label for="<?php echo $name; ?>[<?php echo $post_type->name; ?>]">
+        <input type="checkbox" id="<?php echo $name; ?>[<?php echo $post_type->name; ?>]" name="kbso_plugin_options[<?php echo $name; ?>][]" value="<?php echo $post_type->name; ?>" <?php checked( true, in_array( $post_type->name, $options[ $name ] ) ); ?> />
         <?php echo esc_html( $post_type->labels->name ); ?>
-        <input type="checkbox" id="<?php echo $name; ?>[<?php echo $post_type->name; ?>]" name="kbso_plugin_options[<?php echo $name; ?>][]" value="<?php echo $post_type->name; ?>" <?php checked( $post_type->name, $options[ $name ] ); ?> />
         </label>
         <?php
         
@@ -197,29 +357,48 @@ function kbso_plugin_options_validate( $input ) {
     
     $output = array();
     
-    if ( isset( $input['share_links_text_intro'] ) && ! empty( $input['share_links_text_intro'] ) ) {
-	$output['share_links_text_intro'] = sanitize_title( $input['share_links_text_intro'] );
+    if ( isset( $input['share_links_activate_feature'] ) && array_key_exists( $input['share_links_activate_feature'], kbso_options_radio_buttons() ) ) {
+        $output['share_links_activate_feature'] = $input['share_links_activate_feature'];
     }
     
-    if ( isset( $input['share_links_link_display'] ) && array_key_exists( $input['share_links_link_display'], kbso_options_radio_buttons() ) ) {
-        $output['share_links_link_display'] = $input['share_links_link_display'];
+    if ( isset( $input['share_links_intro_text'] ) && ! empty( $input['share_links_intro_text'] ) ) {
+	$output['share_links_intro_text'] = sanitize_title( $input['share_links_intro_text'] );
+    }
+    
+    if ( isset( $input['share_links_link_content'] ) && ! empty( $input['share_links_link_content'] ) ) {
+        
+        if ( in_array( 'icon', $input['share_links_link_content'] ) || in_array( 'name', $input['share_links_link_content'] ) ) {
+            
+            $output['share_links_link_content'] = $input['share_links_link_content'];
+            
+        } else {
+            
+            $input['share_links_link_content'][] = 'icon';
+            
+            $output['share_links_link_content'] = $input['share_links_link_content'];
+            
+            add_settings_error(
+                'kbso-options-sharelinks',
+                esc_attr( 'settings_updated' ),
+                __('Link Content - You must select at least one from icon and name.', 'kbso'),
+                'error'
+            );
+            
+        }
+        
     }
     
     if ( isset( $input['share_links_post_types'] ) ) {
         $output['share_links_post_types'] = esc_html( $input['share_links_post_types'] );
     }
-        
-    //if ( isset( $input['feature_placeholder_message'] ) && ! empty( $input['feature_placeholder_message'] ) )
-	//$output['feature_placeholder_message'] = wp_filter_post_kses( $input['feature_placeholder_message'] );
     
-    //if ( isset( $input['feature_verification_bing_webmaster'] ) && ! empty( $input['feature_verification_bing_webmaster'] ) )
-	//$output['feature_verification_bing_webmaster'] = wp_kses( $input['feature_verification_bing_webmaster'] , array ('') );
-     
-    //if ( isset( $input['feature_verification_google_analytics'] ) && ! empty( $input['feature_verification_google_analytics'] ) )
-	//$output['feature_verification_google_analytics'] = esc_js( $input['feature_verification_google_analytics'] );
+    if ( isset( $input['share_links_theme'] ) && array_key_exists( $input['share_links_theme'], kbso_options_theme_select_dropdown() ) ) {
+        $output['share_links_theme'] = $input['share_links_theme'];
+    }
     
     // Combine Inputs with currently Saved data, for multiple option page compability
     $options = wp_parse_args( $input, $options );
     
     return apply_filters( 'kbso_plugin_options_validate', $options, $output );
+    
 }
