@@ -5,25 +5,15 @@
 /*
  * Import Modules
  */
-@import "fonticons";
-@import "mixins";
+@import "fonts/zocial";
+@import "fonts/fontawesome";
+@import "misc/mixins";
 
 /*
- * Custom Values
+ * Social Colors
  */
 
-// Social Color Variables
-$facebook: #3b5998;
-$twitter: #00aced;
-$googleplus: #dd4b39;
-$linkedin: #007bb6;
-$pinterest: #cb2027;
-$youtube: #bb0000;
-$instagram: #517fa4;
-$flickr: #ff0084;
-$foursquare: #0072b1;
-$rss: #ffcc00;
-$tumblr: #2C4762;
+@import "misc/social-colors";
 
 /*
  * General Admin Styling
@@ -294,12 +284,12 @@ h3.title {
 .social-link.linkedin:hover {
         background: darken($linkedin, 10%);
 }
-.social-link.google {
+.social-link.googleplus {
         background: $googleplus;
 }
-.social-link.google:active,
-.social-link.google:focus,
-.social-link.google:hover {
+.social-link.googleplus:active,
+.social-link.googleplus:focus,
+.social-link.googleplus:hover {
         background: darken($googleplus, 10%);
 }
 .social-link.pinterest {
@@ -334,6 +324,38 @@ h3.title {
 .social-link.flickr:hover {
         background: darken($flickr, 10%);
 }
+.social-link.digg {
+        background: $digg;
+}
+.social-link.digg:active,
+.social-link.digg:focus,
+.social-link.digg:hover {
+        background: darken($digg, 10%);
+}
+.social-link.stumbleupon {
+        background: $stumbleupon;
+}
+.social-link.stumbleupon:active,
+.social-link.stumbleupon:focus,
+.social-link.stumbleupon:hover {
+        background: darken($stumbleupon, 10%);
+}
+.social-link.delicious {
+        background: $delicious;
+}
+.social-link.delicious:active,
+.social-link.delicious:focus,
+.social-link.delicious:hover {
+        background: darken($delicious, 10%);
+}
+.social-link.reddit {
+        background: $reddit;
+}
+.social-link.reddit:active,
+.social-link.reddit:focus,
+.social-link.reddit:hover {
+        background: darken($reddit, 10%);
+}
 
 /*
  * Sharing Page
@@ -360,7 +382,7 @@ h3.title {
         height: 33px;
         display: inline-block;
         float: left;
-        margin-right: 10px;
+        margin: 0 10px 0 0;
 }
 #sort-container .social-link {
         color: #fff;
@@ -370,4 +392,61 @@ h3.title {
         padding: 4px 11px 4px 11px;
         min-width: 70px;
         margin: 0;
+}
+
+/*
+ * Admin - General
+ */
+
+// Foundation 4 - Switch
+@import "misc/foundation-switch";
+
+/*
+ * Admin - Widgets Page
+ */
+.widget .widget-content .display,
+.widget .widget-content .style,
+.widget .widget-content .background,
+.widget .widget-content .conversations,
+.widget .widget-content .avatar,
+.widget .widget-content .media {
+        display: none;
+}
+.widget .widget-content.tweets .display,
+.widget .widget-content.tweets .style,
+.widget .widget-content.tweets .background,
+.widget .widget-content.tweets .conversations,
+.widget .widget-content.tweets .avatar,
+.widget .widget-content.tweets.list .media {
+        display: block;
+}
+
+/*
+ * Admin - Share Links Page
+ */
+.koptions input[type="text"] {
+        min-width: 260px;
+}
+.koptions label[for^="share_links_post_types"] {
+        display: block;
+        clear: both;
+        float: left;
+}
+.koptions label[for^="share_links_post_types"] input {
+        margin-right: 6px;
+}
+
+.koptions select[name="kbso_plugin_options[share_links_theme]"] {
+        min-width: 160px;
+}
+.koptions label[for^="share_links_link_content"] {
+        display: block;
+        clear: both;
+        float: left;
+}
+.koptions label[for^="share_links_link_content"] input {
+        margin-right: 6px;
+}
+.koptions .howto {
+        clear: both;
 }
