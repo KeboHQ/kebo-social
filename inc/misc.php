@@ -9,6 +9,117 @@ if ( ! defined( 'KBSO_VERSION' ) ) {
 }
 
 /**
+ * Dashboard Widgets
+ */
+
+/**
+ * Render Dashboard Widgets
+ */
+function kbso_dashboard_widget_render( $title, $content, $sortable = false ) {
+    
+    ?>
+    <div class="dashboard-box">
+
+        <div class="dash-header">
+
+            <h3><?php echo esc_html( $title ); ?></h3>
+
+        </div>
+
+        <div class="dash-content">
+
+            <?php echo $content; ?>
+
+        </div>
+
+    </div>
+    <?php
+    
+}
+
+/**
+ * RSS Feed - Plugin News
+ */
+function kbso_dashboard_introduction() {
+    
+    // Begin Output Buffering
+    ob_start();
+    
+    ?>
+    <p><?php _e('Welcome to Kebo Social, we hope you enjoy using the plugin', 'kbso'); ?></p>
+    
+    <ul>
+        <li><a href="#" title=""><?php _e('Getting Started Guide', 'kbso'); ?></a></li>
+        <li><a href="#" title=""><?php _e('Tips & Tricks', 'kbso'); ?></a></li>
+        <li><a href="#" title=""><?php _e('Documentation', 'kbso'); ?></a></li>
+    </ul>
+    <?php
+    
+    // End Output Buffering and Clear Buffer
+    $output = ob_get_contents();
+    ob_end_clean();
+    
+    return $output;
+    
+}
+
+/**
+ * RSS Feed - Plugin News
+ */
+function kbso_dashboard_news_feed() {
+
+    $url = 'http://kebopowered.com/category/kebo-social/feed/';
+    
+    $rss = fetch_feed( $url );
+
+    if ( ! is_wp_error( $rss ) ) {
+
+        // Figure out how many total items there are, but limit it to 5. 
+        $maxitems = $rss->get_item_quantity(5);
+
+        // Build an array of all the items, starting with element 0 (first element).
+        $rss_items = $rss->get_items(0, $maxitems);
+        
+    }
+    
+    // Begin Output Buffering
+    ob_start();
+    
+    ?>
+    <ul class="knews-posts">
+        
+        <?php if ( $maxitems == 0 ) : ?>
+        
+            <li><?php _e('Sorry, no Posts found.', 'kbso'); ?></li>
+            
+        <?php else : ?>
+            
+            <?php // Loop through each feed item and display each item as a hyperlink. ?>
+            <?php foreach ( $rss_items as $item ) : ?>
+                
+                <li>
+                    <a href="<?php echo esc_url($item->get_permalink()); ?>" title="<?php printf(__('Posted %s', 'kbso'), $item->get_date('j F Y | g:i a')); ?>">
+                        <?php echo esc_html( $item->get_title() . ' - ' . $item->get_date('jS M') ); ?>
+                    </a>
+                </li>
+                
+            <?php endforeach; ?>
+                
+        <?php endif; ?>
+                
+    </ul>
+    <?php
+    
+    // End Output Buffering and Clear Buffer
+    $output = ob_get_contents();
+    ob_end_clean();
+    
+    return $output;
+    
+}
+
+
+/**
  * Facebook Functions
  */
 
