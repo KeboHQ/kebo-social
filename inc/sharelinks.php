@@ -31,6 +31,8 @@ function kbso_add_share_links( $content ) {
 
     if ( in_array( $post->post_type, $options['share_links_post_types'] ) && is_single() ) {
 
+        $theme = $options['share_links_theme'];
+        
         /**
          * Setup an instance of the View class.
          * Allow customization using a filter.
@@ -38,7 +40,7 @@ function kbso_add_share_links( $content ) {
         $view = new Kbso_View(
             apply_filters(
                 'kbso_sharelinks_view_dir',
-                KBSO_PATH . 'views/sharelinks'
+                KBSO_PATH . 'views/sharelinks/' . $theme
             )
         );
         
@@ -126,7 +128,7 @@ function kbso_add_share_links( $content ) {
             }
             
         }
-            
+        
         $links = $view
             ->set_view( 'links' )
             ->set( 'classes', $classes )
