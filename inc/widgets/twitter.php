@@ -61,7 +61,8 @@ class Kbso_Twitter_Widget extends WP_Widget {
         'type' => 'tweets',
         'display' => 'tweets',
         'style' => 'list',
-        'theme' => 'light',
+        'theme' => 'default',
+        'background' => 'light',
         'conversations' => false,
         'count' => 5,
         'offset' => 0,
@@ -186,12 +187,12 @@ class Kbso_Twitter_Widget extends WP_Widget {
          */
         if ( ! is_array( $tweets ) ) {
             
-            _e('Sorry, no Tweets found.', 'kbso');
+            _e('Sorry, no Tweet data found.', 'kbso');
             return;
             
         } elseif ( ! isset( $tweets[0]['created_at'] ) ) {
             
-            _e('Sorry, the data is not in a valid format.', 'kbso');
+            _e('Sorry, the Tweet data is not in a valid format.', 'kbso');
             return;
             
         }
@@ -393,23 +394,21 @@ class Kbso_Twitter_Widget extends WP_Widget {
             </p>
         </label>
 
-        <div class="feed-container<?php echo ( isset( $instance['type'] ) ) ? ' ' . $instance['type'] : ''; ?>">
-
-        <label for="<?php echo $this->get_field_id('display'); ?>">
+        <label class="display" for="<?php echo $this->get_field_id('display'); ?>">
             <p>
-                <?php _e('Display', 'kebo_twitter'); ?>:
+                <?php _e('Display', 'kbso'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('display') ?>" name="<?php echo $this->get_field_name('display'); ?>">
-                    <option value="tweets" <?php selected( $instance['display'], 'tweets' ); ?>><?php _e('Tweets', 'kebo_twitter'); ?></option>
-                    <option value="retweets" <?php selected( $instance['display'], 'retweets' ); ?>><?php _e('Re-Tweets', 'kebo_twitter'); ?></option>
-                    <option value="all" <?php selected( $instance['display'], 'all' ); ?>><?php _e('All Tweets', 'kebo_twitter'); ?></option>
+                    <option value="tweets" <?php selected( $instance['display'], 'tweets' ); ?>><?php _e('Tweets', 'kbso'); ?></option>
+                    <option value="retweets" <?php selected( $instance['display'], 'retweets' ); ?>><?php _e('Re-Tweets', 'kbso'); ?></option>
+                    <option value="all" <?php selected( $instance['display'], 'all' ); ?>><?php _e('All Tweets', 'kbso'); ?></option>
                 </select>
-                <span class="howto">Explanation text</span>
+                <span class="howto"><?php _e('help text', 'kbso'); ?></span>
             </p>
         </label>
 
-        <label for="<?php echo $this->get_field_id('style'); ?>">
+        <label class="style" for="<?php echo $this->get_field_id('style'); ?>">
             <p>
-                <?php _e('Style', 'kebo_twitter'); ?>:
+                <?php _e('Style', 'kbso'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('style') ?>" name="<?php echo $this->get_field_name('style'); ?>">
                     <option value="list" <?php selected( $instance['style'], 'list' ); ?>><?php _e('List', 'kbso'); ?></option>
                     <option value="slider" <?php selected( $instance['style'], 'slider' ); ?>><?php _e('Slider', 'kbso'); ?></option>
@@ -417,41 +416,42 @@ class Kbso_Twitter_Widget extends WP_Widget {
             </p>
         </label>
 
-        <label for="<?php echo $this->get_field_id('theme'); ?>">
+        <label class="theme" for="<?php echo $this->get_field_id('theme'); ?>">
             <p>
-                <?php _e('Theme', 'kebo_twitter'); ?>:
+                <?php _e('Theme', 'kbso'); ?>:
                 <select style="width: 100%;" id="<?php echo $this->get_field_id('theme') ?>" name="<?php echo $this->get_field_name('theme'); ?>">
-                    <option value="light" <?php
-                    if ('light' == $instance['theme']) {
-                        echo 'selected="selected"';
-                    }
-                    ?>><?php _e('Light', 'kebo_twitter'); ?></option>
-                    <option value="dark" <?php
-                    if ('dark' == $instance['theme']) {
-                        echo 'selected="selected"';
-                    }
-                    ?>><?php _e('Dark', 'kebo_twitter'); ?></option>
+                    <option value="default" <?php selected( $instance['theme'], 'default' ); ?>><?php _e('Default', 'kbso'); ?></option>
+                    <option value="flat" <?php selected( $instance['theme'], 'flat' ); ?>><?php _e('Flat', 'kbso'); ?></option>
+                    <option value="gradient" <?php selected( $instance['theme'], 'gradient' ); ?>><?php _e('Gradient', 'kbso'); ?></option>
+                </select>
+            </p>
+        </label>
+            
+        <label class="background" for="<?php echo $this->get_field_id('background'); ?>">
+            <p>
+                <?php _e('Background', 'kbso'); ?>:
+                <select style="width: 100%;" id="<?php echo $this->get_field_id('background') ?>" name="<?php echo $this->get_field_name('background'); ?>">
+                    <option value="light" <?php selected( $instance['background'], 'light' ); ?>><?php _e('Light', 'kbso'); ?></option>
+                    <option value="dark" <?php selected( $instance['background'], 'dark' ); ?>><?php _e('Dark', 'kbso'); ?></option>
                 </select>
             </p>
         </label>
 
-        <label for="<?php echo $this->get_field_id('count'); ?>">
-            <p><?php _e('Number Of Tweets', 'kebo_twitter'); ?>: <input style="width: 28px;" type="text" value="<?php echo $instance['count']; ?>" name="<?php echo $this->get_field_name('count'); ?>" id="<?php echo $this->get_field_id('count'); ?>"> <span><?php _e('Range 1-50', 'kebo_twitter') ?></span></p>
+        <label class="count" for="<?php echo $this->get_field_id('count'); ?>">
+            <p><?php _e('Number to show', 'kbso'); ?>: <input style="width: 28px;" type="text" value="<?php echo $instance['count']; ?>" name="<?php echo $this->get_field_name('count'); ?>" id="<?php echo $this->get_field_id('count'); ?>"> <span><?php _e('Range 1-50', 'kbso') ?></span></p>
         </label>
 
-        <label for="<?php echo $this->get_field_id('avatar'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('avatar'); ?>" id="<?php echo $this->get_field_id('avatar'); ?>" <?php selected( $instance['avatar'], 'avatar' ); ?>> <?php _e('Show profile image?', 'kebo_twitter'); ?> </p>
+        <label class="conversations" for="<?php echo $this->get_field_id('conversations'); ?>">
+            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('conversations'); ?>" id="<?php echo $this->get_field_id('conversations'); ?>" <?php selected( $instance['conversations'], 'true' ); ?>> <?php _e('Show conversations?', 'kbso'); ?> </p>
         </label>
 
-        <label for="<?php echo $this->get_field_id('conversations'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('conversations'); ?>" id="<?php echo $this->get_field_id('conversations'); ?>" <?php selected( $instance['conversations'], 'true' ); ?>> <?php _e('Show conversations?', 'kebo_twitter'); ?> </p>
+        <label class="avatar" for="<?php echo $this->get_field_id('avatar'); ?>">
+            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('avatar'); ?>" id="<?php echo $this->get_field_id('avatar'); ?>" <?php selected( $instance['avatar'], 'avatar' ); ?>> <?php _e('Show profile image?', 'kbso'); ?> </p>
         </label>
 
-        <label for="<?php echo $this->get_field_id('media'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('media'); ?>" id="<?php echo $this->get_field_id('media'); ?>" <?php selected( $instance['media'], 'true' ); ?>> <?php _e('Show media? (only Lists)', 'kebo_twitter'); ?> </p>
+        <label class="media" for="<?php echo $this->get_field_id('media'); ?>">
+            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('media'); ?>" id="<?php echo $this->get_field_id('media'); ?>" <?php selected( $instance['media'], 'true' ); ?>> <?php _e('Show media? (only Lists)', 'kbso'); ?> </p>
         </label>
-            
-        </div>
 
         <?php
     }
@@ -473,6 +473,7 @@ class Kbso_Twitter_Widget extends WP_Widget {
         $instance['title'] = wp_filter_nohtml_kses($new_instance['title']);
         $instance['style'] = wp_filter_nohtml_kses($new_instance['style']);
         $instance['theme'] = wp_filter_nohtml_kses($new_instance['theme']);
+        $instance['background'] = wp_filter_nohtml_kses($new_instance['background']);
         $instance['avatar'] = wp_filter_nohtml_kses($new_instance['avatar']);
         $instance['conversations'] = wp_filter_nohtml_kses($new_instance['conversations']);
         $instance['media'] = wp_filter_nohtml_kses($new_instance['media']);
@@ -549,28 +550,26 @@ class Kbso_Twitter_Widget extends WP_Widget {
         ?>
 
         <script type="text/javascript">
-            //<![CDATA[
+            
             jQuery('[id^="widget-kbso_twitter_widget-"][id$="-type"]').change( function() {
                 
                 // Get the currently selected value
                 var kselected = jQuery(this).val();
                 // Add this value to the Widget contain container
-                jQuery(this).parent().parent().parent().children('.feed-container').eq(0).removeClass('tweets followers friends').addClass( kselected );
+                jQuery(this).parent().parent().parent().removeClass('tweets followers friends').addClass( kselected );
                 
             });
-            //]]>
+            
+            jQuery('[id^="widget-kbso_twitter_widget-"][id$="-style"]').change( function() {
+                
+                // Get the currently selected value
+                var kselected = jQuery(this).val();
+                // Add this value to the Widget contain container
+                jQuery(this).parent().parent().parent().removeClass('list slider').addClass( kselected );
+                
+            });
+            
         </script>
-        
-        <style type="text/css">
-            
-            .widget-content .feed-container {
-                display: none;
-            }
-            .widget-content .feed-container.tweets {
-                display: block;
-            }
-            
-        </style>
 
         <?php
         // End Output Buffering and Clear Buffer
