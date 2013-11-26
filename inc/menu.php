@@ -54,7 +54,7 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                 __('Sharing', 'kbso'), // Name of Page
                 __('Sharing', 'kbso'), // Label in Menu
                 'manage_options', // Capability Required
-                'kbso_sharing', // Menu Slug, used to uniquely identify the page
+                'kbso-sharing', // Menu Slug, used to uniquely identify the page
                 'kbso_sharing_page' // Function that renders the options page
         );
         
@@ -66,19 +66,13 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
-        
-        /*
-         * Global Dashboad Object/Class and Prepare Widgets to be Rendered.
-         */
-        global $dashboard;
-        $dashboard->prepare_widgets();
         ?>
 
         <div class="wrap">
             <h2><?php _e( 'Kebo Social - Dashboard', 'kbso' ); ?></h2>
             <?php settings_errors(); ?>
             
-            <p><?php _e('This is your Kebo SE Dashboard.' , 'kbso'); ?></p>
+            <p><?php _e('This is your Kebo Social Dashboard.' , 'kbso'); ?></p>
 
             <div id="kebo-wrap" class="kebo-dash kebo" data-user_id="<?php echo get_current_user_id(); ?>">
 
@@ -98,7 +92,19 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                         
                         <?php do_action( 'kbso_dashboard_col', 1 ); ?>
                         
-                            
+                        <?php
+                        kbso_dashboard_widget_render(
+                            __('Welcome', 'kbso'), // Title
+                            kbso_dashboard_introduction() // Content
+                        );
+                        ?>
+                        
+                        <?php
+                        kbso_dashboard_widget_render(
+                            __('Latest Plugin News', 'kbso'), // Title
+                            kbso_dashboard_news_feed() // Content
+                        );
+                        ?>
                             
                     </div><!-- .small-12 .large-6 .columns -->
                     
@@ -172,21 +178,21 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
 
                                 <div class="services-list">
                                     
-                                    <a class="social-link twitter" title="Connect to Twitter" href="http://auth.kebopowered.com/kbs_twitter/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-twitter"></i><?php _e('Twitter', 'kbso'); ?></a>
+                                    <a class="social-link twitter" title="Connect to Twitter" href="http://auth.kebopowered.com/kbs_twitter/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-twitter"></i><?php _e('Twitter', 'kbso'); ?></a>
 
-                                    <a class="social-link facebook" title="Connect to Facebook" href="http://auth.kebopowered.com/kbs_facebook/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-facebook"></i><?php _e('Facebook', 'kbso'); ?></a>
+                                    <a class="social-link facebook" title="Connect to Facebook" href="http://auth.kebopowered.com/kbs_facebook/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-facebook"></i><?php _e('Facebook', 'kbso'); ?></a>
 
-                                    <a class="social-link google" title="Connect to Google" href="http://auth.kebopowered.com/google/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-google-plus"></i><?php _e('Google', 'kbso'); ?></a>
+                                    <a class="social-link google" title="Connect to Google" href="http://auth.kebopowered.com/google/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-google-plus"></i><?php _e('Google', 'kbso'); ?></a>
 
-                                    <a class="social-link linkedin" title="Connect to LinkedIn" href="http://auth.kebopowered.com/linkedin/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-linkedin"></i><?php _e('LinkedIn', 'kbso'); ?></a>
+                                    <a class="social-link linkedin" title="Connect to LinkedIn" href="http://auth.kebopowered.com/linkedin/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-linkedin"></i><?php _e('LinkedIn', 'kbso'); ?></a>
 
-                                    <a class="social-link pinterest" title="Connect to Pinterest" href="http://auth.kebopowered.com/pinterest/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-pinterest"></i><?php _e('Pinterest', 'kbso'); ?></a>
+                                    <a class="social-link pinterest" title="Connect to Pinterest" href="http://auth.kebopowered.com/pinterest/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-pinterest"></i><?php _e('Pinterest', 'kbso'); ?></a>
 
-                                    <a class="social-link tumblr" title="Connect to Tumblr" href="http://auth.kebopowered.com/tumblr/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-tumblr"></i><?php _e('Tumblr', 'kbso'); ?></a>
+                                    <a class="social-link tumblr" title="Connect to Tumblr" href="http://auth.kebopowered.com/tumblr/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-tumblr"></i><?php _e('Tumblr', 'kbso'); ?></a>
 
-                                    <a class="social-link instagram" title="Connect to Instagram" href="http://auth.kebopowered.com/instagram/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-instagram"></i><?php _e('Instagram', 'kbso'); ?></a>
+                                    <a class="social-link instagram" title="Connect to Instagram" href="http://auth.kebopowered.com/instagram/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-instagram"></i><?php _e('Instagram', 'kbso'); ?></a>
 
-                                    <a class="social-link flickr" title="Connect to Flickr" href="http://auth.kebopowered.com/flickr/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="icon-flickr"></i><?php _e('Flickr', 'kbso'); ?></a>
+                                    <a class="social-link flickr" title="Connect to Flickr" href="http://auth.kebopowered.com/flickr/?origin=<?php echo admin_url('admin.php?page=kbso-connections') ?>&_wpnonce=<?php echo wp_create_nonce( 'kebo-new-connection' ); ?>"><i class="fa fa-flickr"></i><?php _e('Flickr', 'kbso'); ?></a>
                                     
                                 </div><!-- .services-list -->
 
@@ -223,18 +229,26 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
 
                             <h3 class="title"><?php _e( 'Social Share Links', 'kbso' ); ?></h3>
                             
-                            <p>These are the links available which help your blog visitors to share your work across the internet. Move the relevant buttons into the box below to display them on your site.</p>
+                            <p>These are the links available which help your website visitors to share your work across the internet. Move the relevant buttons into the box below to display them on your site.</p>
+                            
+                            <h4 class="title"><?php _e( 'Available Services', 'kbso' ); ?></h4>
                             
                             <div class="panel">
 
                                 <ul id="share-links" class="connectedSortable Sortable">
                                     
-                                    <li class="sortable"><a class="social-link twitter" href="#"><i class="icon-twitter"></i>Twitter</a></li>
-                                    <li class="sortable"><a class="social-link facebook" href="#"><i class="icon-facebook"></i>Facebook</a></li>
-                                    <li class="sortable"><a class="social-link google" href="#"><i class="icon-google-plus"></i>Google</a></li>
-                                    <li class="sortable"><a class="social-link linkedin" href="#"><i class="icon-linkedin"></i>LinkedIn</a></li>
-                                    <li class="sortable"><a class="social-link pinterest" href="#"><i class="icon-pinterest"></i>Pinterest</a></li>
-                                    <li class="sortable"><a class="social-link tumblr" href="#"><i class="icon-tumblr"></i>Tumblr</a></li>
+                                    <?php
+                                    $remaining = kbso_share_links_order( 'remaining' );
+                                    if ( is_array( $remaining ) ) {
+                                        foreach ( $remaining as $link ) {
+
+                                            ?>
+                                            <li class="sortable" data-service="<?php echo $link; ?>"><a class="social-link <?php echo $link; ?>" href="#"><i class="zocial <?php echo $link; ?>"></i><?php echo ucfirst( $link ); ?></a></li>
+                                            <?php
+
+                                        }
+                                    }
+                                    ?>
                                     
                                 </ul>
 
@@ -243,6 +257,19 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                             <div class="panel">
 
                                 <ul id="share-links-selected" class="connectedSortable Sortable" style="min-height: 40px;">
+                                    
+                                    <?php
+                                    $selected = kbso_share_links_order( 'selected' );
+                                    if ( is_array( $selected ) ) {
+                                        foreach ( kbso_share_links_order( 'selected' ) as $link ) {
+
+                                            ?>
+                                            <li class="sortable" data-service="<?php echo $link; ?>"><a class="social-link <?php echo $link; ?>" href="#"><i class="zocial <?php echo $link; ?>"></i><?php echo ucfirst( $link ); ?></a></li>
+                                            <?php
+
+                                        }
+                                    }
+                                    ?>
                                     
                                 </ul>
 
@@ -264,8 +291,35 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
                                             
                                         },
                                         update: function( event, ui ) {
-                                            
+                                    
+                                            // do AJAX config save
+                                            var korder = new Array;
+
+                                            jQuery( '#share-links-selected .sortable' ).delay( 500 ).each( function( index ) {
+
+                                                var kservice = jQuery(this).data( 'service' );
+
+                                                // Add data to array
+                                                korder.push( kservice );
+
+                                            });
+
+                                            var data = {
+                                                action: 'kbso_save_sharelink_order',
+                                                data: korder,
+                                                nonce: '<?php echo wp_create_nonce( 'kbso_sharelink_order' ); ?>'
+                                            };
+
                                             // do AJAX update
+                                            jQuery.post( ajaxurl, data, function( response ) {
+
+                                                response = jQuery.parseJSON( response );
+
+                                                if ( 'true' === response.success && 'save' === response.action && window.console) {
+                                                    console.log('Kebo Social - Share Link order successfully saved.');
+                                                }
+
+                                            });
                                             
                                         }
                                         
@@ -277,27 +331,23 @@ if ( ! function_exists( 'kebo_se_plugin_menu' ) && ! function_exists( 'kebo_se_d
 
                         </div><!-- .small-12 .large-12 .columns -->
 
-                        <div class="small-12 large-12 columns">
+                        <div class="small-12 large-12 columns koptions">
                             
-                            <?php settings_errors(); ?>
+                            <?php settings_errors('kbso-options-sharelinks'); ?>
 
                             <form method="post" action="options.php">
                                 <?php
                                 settings_fields( 'kbso_options' );
-                                do_settings_sections( 'kbso_sharing' );
+                                do_settings_sections( 'kbso-sharing' );
                                 submit_button();
                                 $options = kbso_get_plugin_options();
                                 print_r( $options );
                                 ?>
                             </form>
-
-                            <p></p>
+                             
+                            <?php $temp = get_option( 'kbso_sharelink_order' ); print_r( $temp ); ?>
                             
-                            <div class="panel">
-
-                                
-
-                            </div><!-- .panel -->
+                            <?php $temp1 = kbso_share_links_order( 'order' ); print_r( $temp1 ); ?>
 
                         </div><!-- .small-12 .large-12 .columns -->
 
