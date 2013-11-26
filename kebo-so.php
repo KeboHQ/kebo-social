@@ -6,7 +6,7 @@
  * Version: 0.1.0
  * Author: Kebo
  * Author URI: http://kebopowered.com
- * Text Domain: kebo-so
+ * Text Domain: kbso
  * Domain Path: languages
  */
 
@@ -38,7 +38,7 @@ if ( version_compare( PHP_VERSION, '5.2', '<' ) ) {
         
         require_once ABSPATH . '/wp-admin/includes/plugin.php';
         deactivate_plugins(__FILE__);
-        wp_die( __( 'Kebo Social Engagement requires PHP 5.2 or higher, as does WordPress 3.2 and higher.', 'kbso' ) );
+        wp_die( __( 'Kebo Social requires PHP 5.2 or higher, as does WordPress 3.2 and higher.', 'kbso' ) );
         
     } else {
         
@@ -72,6 +72,11 @@ function kbso_plugin_setup() {
      * Include AJAX Functions.
      */
     require_once( KBSO_PATH . 'inc/ajax.php' );
+    
+    /*
+     * Include Share Link Functions.
+     */
+    require_once( KBSO_PATH . 'inc/sharelinks.php' );
     
     /*
      * Include Misc Functions.
@@ -113,6 +118,7 @@ if ( ! function_exists( 'kbso_register_files' ) ) :
         // Register Styles
         wp_register_style( 'kbso-admin-css', KBSO_URL . 'assets/css/admin.css', array(), KBSO_VERSION, 'all' );
         wp_register_style( 'kbso-widgets-css', KBSO_URL . 'assets/css/widgets.css', array(), KBSO_VERSION, 'all' );
+        wp_register_style( 'kbso-sharelinks-css', KBSO_URL . 'assets/css/sharelinks.css', array(), KBSO_VERSION, 'all' );
         
         // Register Scripts
         wp_register_script( 'kbso-admin-js', KBSO_URL . 'assets/js/admin.js', array(), KBSO_VERSION, true );
