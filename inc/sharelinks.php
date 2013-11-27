@@ -170,7 +170,6 @@ function kbso_share_links_js_print() {
     ?>
     <script type="text/javascript">
         
-        //<![CDATA[
         jQuery(document).ready(function() {
             
             jQuery( '.ksharelinks ul li a' ).click(function(e) {
@@ -184,7 +183,6 @@ function kbso_share_links_js_print() {
             });
             
         });
-        //]]>
         
     </script>
     <?php
@@ -241,6 +239,9 @@ function kbso_share_links_update_counts() {
     
     if ( $counts['expiry'] < time() ) {
     
+        /*
+         * Update Twitter Share Count
+         */
         $twitter = kbso_update_twitter_count( $permalink );
 
         if ( isset( $twitter->count ) ) {
@@ -249,6 +250,9 @@ function kbso_share_links_update_counts() {
 
         }
 
+        /*
+         * Update Facebook Share Count
+         */
         $facebook = kbso_update_facebook_count( $permalink );
 
         if ( isset( $facebook->shares ) ) {
@@ -257,6 +261,9 @@ function kbso_share_links_update_counts() {
 
         }
         
+        /*
+         * Update Google+ Share Count
+         */
         $googleplus = kbso_update_googleplus_count( $permalink );
 
         if ( $googleplus ) {
@@ -265,6 +272,9 @@ function kbso_share_links_update_counts() {
 
         }
         
+        /*
+         * Update LinkedIn Share Count
+         */
         $linkedin = kbso_update_linkedin_count( $permalink );
 
         if ( $linkedin->count ) {
@@ -273,6 +283,9 @@ function kbso_share_links_update_counts() {
 
         }
         
+        /*
+         * Update Pinterest Share Count
+         */
         $pinterest = kbso_update_pinterest_count( $permalink );
 
         if ( $pinterest ) {
@@ -281,6 +294,9 @@ function kbso_share_links_update_counts() {
 
         }
         
+        /*
+         * Update StumbleUpon Share Count
+         */
         $stumbleupon = kbso_update_stumbleupon_count( $permalink );
         
         if ( $stumbleupon ) {
@@ -289,6 +305,9 @@ function kbso_share_links_update_counts() {
 
         }
         
+        /*
+         * Update Delicious Share Count
+         */
         $delicious = kbso_update_delicious_count( $permalink );
         
         if ( $delicious ) {
@@ -297,6 +316,9 @@ function kbso_share_links_update_counts() {
 
         }
 
+        /*
+         * Update Expiry Time
+         */
         $counts['expiry'] = time() + ( 5 * MINUTE_IN_SECONDS );
         $counts['expiry'] = time();
 
@@ -310,6 +332,9 @@ function kbso_share_links_update_counts() {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get Twitter Share Count.
+ */
 function kbso_update_twitter_count( $permalink ) {
     
     $permalink = 'http://www.codedevelopr.com';
@@ -330,6 +355,9 @@ function kbso_update_twitter_count( $permalink ) {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get Facebook Share Count.
+ */
 function kbso_update_facebook_count( $permalink ) {
     
     $permalink = 'http://www.codedevelopr.com';
@@ -350,6 +378,9 @@ function kbso_update_facebook_count( $permalink ) {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get LinkedIn Share Count.
+ */
 function kbso_update_linkedin_count( $permalink ) {
     
     $permalink = 'http://www.codedevelopr.com';
@@ -366,6 +397,9 @@ function kbso_update_linkedin_count( $permalink ) {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get Pinterest Share Count.
+ */
 function kbso_update_pinterest_count( $permalink ) {
     
     $permalink = 'http://www.facebook.com';
@@ -390,6 +424,9 @@ function kbso_update_pinterest_count( $permalink ) {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get Google+ Share Count.
+ */
 function kbso_update_googleplus_count( $permalink ) {
         
     $permalink = 'https://www.khanacademy.org/';
@@ -428,6 +465,9 @@ function kbso_update_googleplus_count( $permalink ) {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get StumbleUpon Share Count.
+ */
 function kbso_update_stumbleupon_count( $permalink ) {
     
     $permalink = 'http://www.facebook.com';
@@ -459,6 +499,9 @@ function kbso_update_stumbleupon_count( $permalink ) {
     
 }
 
+/*
+ * Uses HTTP API to make external requests to get Delicious Share Count.
+ */
 function kbso_update_delicious_count( $permalink ) {
     
     $permalink = 'http://www.facebook.com';
