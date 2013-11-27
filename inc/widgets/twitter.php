@@ -69,6 +69,11 @@ class Kbso_Twitter_Widget extends WP_Widget {
         'avatar' => false,
     );
     
+    /*
+     * Social Service
+     */
+    public $service = 'twitter';
+    
     /**
      * Has the Tweet Intent javascript been printed?
      */
@@ -175,8 +180,6 @@ class Kbso_Twitter_Widget extends WP_Widget {
             
         extract( $args, EXTR_SKIP );
         
-        global $sidebars_widgets;
-        
         /**
          * We only need the Twitter Intent link js for Tweets.
          */
@@ -204,7 +207,7 @@ class Kbso_Twitter_Widget extends WP_Widget {
         $view = new Kbso_View(
             apply_filters(
                 'kbso_twitter_widget_view_dir',
-                KBSO_PATH . 'views/twitter/tweets/default-light',
+                KBSO_PATH . 'views/twitter/tweets/' . $instance['theme'],
                 $widget_id
             )
         );
@@ -322,7 +325,7 @@ class Kbso_Twitter_Widget extends WP_Widget {
 
         // Add defaults.
         $instance = wp_parse_args( $instance, $this->default_options );
-
+        
         /*
          * Output Relevant Script in the Footer.
          */
@@ -346,113 +349,123 @@ class Kbso_Twitter_Widget extends WP_Widget {
         ?>
 
         <?php if ( ! empty( $twitter_accounts ) ) { ?>
-        <label for="<?php echo $this->get_field_id('accounts'); ?>">
-            <p>
-                <?php _e('Accounts', 'kbso'); ?>:
-                <select style="width: 100%;" size="<?php echo ( 3 < $counter ) ? '4' : $counter ; ?>" id="<?php echo $this->get_field_id('accounts') ?>" name="<?php echo $this->get_field_name('accounts'); ?>[]" multiple="multiple">
-                    <?php
-                    foreach ( $twitter_accounts as $account ) {
-                        
-                        $selected = false;
-                        
-                        if ( is_array( $instance['accounts'] ) ) {
-                            
-                            foreach ( $instance['accounts'] as $account_id ) {
 
-                                if ( $account['account_id'] == $account_id ) {
-                                    $selected = true;
+        <?php
+        $sub_classes[] = 'kwidgetcontainer';
+        $sub_classes[] = $this->service;
+        $sub_classes[] = $instance['type'];
+        $sub_classes[] = $instance['display'];
+        $sub_classes[] = $instance['style'];
+        ?>
+
+        <div class="<?php echo implode( ' ', $sub_classes ); ?>">
+
+            <label for="<?php echo $this->get_field_id('accounts'); ?>">
+                <p>
+                    <?php _e('Accounts', 'kbso'); ?>:
+                    <select style="width: 100%;" size="<?php echo ( 3 < $counter ) ? '4' : $counter ; ?>" id="<?php echo $this->get_field_id('accounts') ?>" name="<?php echo $this->get_field_name('accounts'); ?>[]" multiple="multiple">
+                        <?php
+                        foreach ( $twitter_accounts as $account ) {
+
+                            $selected = false;
+
+                            if ( is_array( $instance['accounts'] ) ) {
+
+                                foreach ( $instance['accounts'] as $account_id ) {
+
+                                    if ( $account['account_id'] == $account_id ) {
+                                        $selected = true;
+                                    }
+
                                 }
 
                             }
-                            
+
+                            ?>
+                            <option value="<?php echo $account['account_id']; ?>" <?php selected( $selected, true ); ?>>@<?php echo $account['account_name']; ?></option>
+                            <?php
+
                         }
-                        
                         ?>
-                        <option value="<?php echo $account['account_id']; ?>" <?php selected( $selected, true ); ?>>@<?php echo $account['account_name']; ?></option>
-                        <?php
-                        
-                    }
-                    ?>
-                </select>
-            </p>
-        </label>
-        <?php } ?>
+                    </select>
+                </p>
+            </label>
+            <?php } ?>
 
-        <label for="<?php echo $this->get_field_id('title'); ?>">
-            <p><?php _e('Title', 'kbso'); ?>: <input style="width: 100%;" type="text" value="<?php echo $instance['title']; ?>" name="<?php echo $this->get_field_name('title'); ?>" id="<?php echo $this->get_field_id('title'); ?>"></p>
-        </label>
+            <label for="<?php echo $this->get_field_id('title'); ?>">
+                <p><?php _e('Title', 'kbso'); ?>: <input style="width: 100%;" type="text" value="<?php echo $instance['title']; ?>" name="<?php echo $this->get_field_name('title'); ?>" id="<?php echo $this->get_field_id('title'); ?>"></p>
+            </label>
 
-        <label for="<?php echo $this->get_field_id('type'); ?>">
-            <p>
-                <?php _e('Type', 'kbso'); ?>:
-                <select style="width: 100%;" id="<?php echo $this->get_field_id('type') ?>" name="<?php echo $this->get_field_name('type'); ?>">
-                    <option value="tweets" <?php selected( $instance['type'], 'tweets' ); ?>><?php _e('Tweets', 'kbso'); ?></option>
-                    <option value="followers" <?php selected( $instance['type'], 'followers' ); ?>><?php _e('Followers', 'kbso'); ?></option>
-                    <option value="friends" <?php selected( $instance['type'], 'friends' ); ?>><?php _e('Friends', 'kbso'); ?></option>
-                </select>
-                <span class="howto"><?php _e('Please choose a type of Widget to see more options.', 'kbso'); ?></span>
-            </p>
-        </label>
+            <label for="<?php echo $this->get_field_id('type'); ?>">
+                <p>
+                    <?php _e('Type', 'kbso'); ?>:
+                    <select style="width: 100%;" id="<?php echo $this->get_field_id('type') ?>" name="<?php echo $this->get_field_name('type'); ?>">
+                        <option value="tweets" <?php selected( $instance['type'], 'tweets' ); ?>><?php _e('Tweets', 'kbso'); ?></option>
+                        <option value="followers" <?php selected( $instance['type'], 'followers' ); ?>><?php _e('Followers', 'kbso'); ?></option>
+                        <option value="friends" <?php selected( $instance['type'], 'friends' ); ?>><?php _e('Friends', 'kbso'); ?></option>
+                    </select>
+                    <span class="howto"><?php _e('Please choose a type of Widget to see more options.', 'kbso'); ?></span>
+                </p>
+            </label>
 
-        <label class="display" for="<?php echo $this->get_field_id('display'); ?>">
-            <p>
-                <?php _e('Display', 'kbso'); ?>:
-                <select style="width: 100%;" id="<?php echo $this->get_field_id('display') ?>" name="<?php echo $this->get_field_name('display'); ?>">
-                    <option value="tweets" <?php selected( $instance['display'], 'tweets' ); ?>><?php _e('Tweets', 'kbso'); ?></option>
-                    <option value="retweets" <?php selected( $instance['display'], 'retweets' ); ?>><?php _e('Re-Tweets', 'kbso'); ?></option>
-                    <option value="all" <?php selected( $instance['display'], 'all' ); ?>><?php _e('All Tweets', 'kbso'); ?></option>
-                </select>
-                <span class="howto"><?php _e('help text', 'kbso'); ?></span>
-            </p>
-        </label>
+            <label class="display" for="<?php echo $this->get_field_id('display'); ?>">
+                <p>
+                    <?php _e('Display', 'kbso'); ?>:
+                    <select style="width: 100%;" id="<?php echo $this->get_field_id('display') ?>" name="<?php echo $this->get_field_name('display'); ?>">
+                        <option value="tweets" <?php selected( $instance['display'], 'tweets' ); ?>><?php _e('Tweets', 'kbso'); ?></option>
+                        <option value="retweets" <?php selected( $instance['display'], 'retweets' ); ?>><?php _e('Re-Tweets', 'kbso'); ?></option>
+                        <option value="all" <?php selected( $instance['display'], 'all' ); ?>><?php _e('All Tweets', 'kbso'); ?></option>
+                    </select>
+                    <span class="howto"><?php _e('help text', 'kbso'); ?></span>
+                </p>
+            </label>
 
-        <label class="style" for="<?php echo $this->get_field_id('style'); ?>">
-            <p>
-                <?php _e('Style', 'kbso'); ?>:
-                <select style="width: 100%;" id="<?php echo $this->get_field_id('style') ?>" name="<?php echo $this->get_field_name('style'); ?>">
-                    <option value="list" <?php selected( $instance['style'], 'list' ); ?>><?php _e('List', 'kbso'); ?></option>
-                    <option value="slider" <?php selected( $instance['style'], 'slider' ); ?>><?php _e('Slider', 'kbso'); ?></option>
-                </select>
-            </p>
-        </label>
-
-        <label class="theme" for="<?php echo $this->get_field_id('theme'); ?>">
-            <p>
-                <?php _e('Theme', 'kbso'); ?>:
-                <select style="width: 100%;" id="<?php echo $this->get_field_id('theme') ?>" name="<?php echo $this->get_field_name('theme'); ?>">
-                    <option value="default" <?php selected( $instance['theme'], 'default' ); ?>><?php _e('Default', 'kbso'); ?></option>
-                    <option value="flat" <?php selected( $instance['theme'], 'flat' ); ?>><?php _e('Flat', 'kbso'); ?></option>
-                    <option value="gradient" <?php selected( $instance['theme'], 'gradient' ); ?>><?php _e('Gradient', 'kbso'); ?></option>
-                </select>
-            </p>
-        </label>
+            <label class="style" for="<?php echo $this->get_field_id('style'); ?>">
+                <p>
+                    <?php _e('Style', 'kbso'); ?>:
+                    <select style="width: 100%;" id="<?php echo $this->get_field_id('style') ?>" name="<?php echo $this->get_field_name('style'); ?>">
+                        <option value="list" <?php selected( $instance['style'], 'list' ); ?>><?php _e('List', 'kbso'); ?></option>
+                        <option value="slider" <?php selected( $instance['style'], 'slider' ); ?>><?php _e('Slider', 'kbso'); ?></option>
+                    </select>
+                </p>
+            </label>
             
-        <label class="background" for="<?php echo $this->get_field_id('background'); ?>">
-            <p>
-                <?php _e('Background', 'kbso'); ?>:
-                <select style="width: 100%;" id="<?php echo $this->get_field_id('background') ?>" name="<?php echo $this->get_field_name('background'); ?>">
-                    <option value="light" <?php selected( $instance['background'], 'light' ); ?>><?php _e('Light', 'kbso'); ?></option>
-                    <option value="dark" <?php selected( $instance['background'], 'dark' ); ?>><?php _e('Dark', 'kbso'); ?></option>
-                </select>
-            </p>
-        </label>
+            <label class="theme" for="<?php echo $this->get_field_id('theme'); ?>">
+                <p>
+                    <?php _e('Theme', 'kbso'); ?>:
+                    <select style="width: 100%;" id="<?php echo $this->get_field_id('theme') ?>" name="<?php echo $this->get_field_name('theme'); ?>">
+                        <option value="default" <?php selected( $instance['theme'], 'default' ); ?>><?php _e('Default', 'kbso'); ?></option>
+                    </select>
+                </p>
+            </label>
 
-        <label class="count" for="<?php echo $this->get_field_id('count'); ?>">
-            <p><?php _e('Number to show', 'kbso'); ?>: <input style="width: 28px;" type="text" value="<?php echo $instance['count']; ?>" name="<?php echo $this->get_field_name('count'); ?>" id="<?php echo $this->get_field_id('count'); ?>"> <span><?php _e('Range 1-50', 'kbso') ?></span></p>
-        </label>
+            <label class="background" for="<?php echo $this->get_field_id('background'); ?>">
+                <p>
+                    <?php _e('Background', 'kbso'); ?>:
+                    <select style="width: 100%;" id="<?php echo $this->get_field_id('background') ?>" name="<?php echo $this->get_field_name('background'); ?>">
+                        <option value="light" <?php selected( $instance['background'], 'light' ); ?>><?php _e('Light', 'kbso'); ?></option>
+                        <option value="dark" <?php selected( $instance['background'], 'dark' ); ?>><?php _e('Dark', 'kbso'); ?></option>
+                    </select>
+                </p>
+            </label>
 
-        <label class="conversations" for="<?php echo $this->get_field_id('conversations'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('conversations'); ?>" id="<?php echo $this->get_field_id('conversations'); ?>" <?php selected( $instance['conversations'], 'true' ); ?>> <?php _e('Show conversations?', 'kbso'); ?> </p>
-        </label>
+            <label class="count" for="<?php echo $this->get_field_id('count'); ?>">
+                <p><?php _e('Number to show', 'kbso'); ?>: <input style="width: 28px;" type="text" value="<?php echo $instance['count']; ?>" name="<?php echo $this->get_field_name('count'); ?>" id="<?php echo $this->get_field_id('count'); ?>"> <span><?php _e('Range 1-50', 'kbso') ?></span></p>
+            </label>
 
-        <label class="avatar" for="<?php echo $this->get_field_id('avatar'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('avatar'); ?>" id="<?php echo $this->get_field_id('avatar'); ?>" <?php selected( $instance['avatar'], 'avatar' ); ?>> <?php _e('Show profile image?', 'kbso'); ?> </p>
-        </label>
+            <label class="conversations" for="<?php echo $this->get_field_id('conversations'); ?>">
+                <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('conversations'); ?>" id="<?php echo $this->get_field_id('conversations'); ?>" <?php selected( $instance['conversations'], 'true' ); ?>> <?php _e('Show conversations?', 'kbso'); ?> </p>
+            </label>
 
-        <label class="media" for="<?php echo $this->get_field_id('media'); ?>">
-            <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('media'); ?>" id="<?php echo $this->get_field_id('media'); ?>" <?php selected( $instance['media'], 'true' ); ?>> <?php _e('Show media? (only Lists)', 'kbso'); ?> </p>
-        </label>
+            <label class="avatar" for="<?php echo $this->get_field_id('avatar'); ?>">
+                <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('avatar'); ?>" id="<?php echo $this->get_field_id('avatar'); ?>" <?php selected( $instance['avatar'], 'avatar' ); ?>> <?php _e('Show profile image?', 'kbso'); ?> </p>
+            </label>
 
+            <label class="media" for="<?php echo $this->get_field_id('media'); ?>">
+                <p><input style="width: 28px;" type="checkbox" value="true" name="<?php echo $this->get_field_name('media'); ?>" id="<?php echo $this->get_field_id('media'); ?>" <?php selected( $instance['media'], 'true' ); ?>> <?php _e('Show media? (only Lists)', 'kbso'); ?> </p>
+            </label>
+
+        </div><!-- .kwidgetcontainer -->
         <?php
     }
 
