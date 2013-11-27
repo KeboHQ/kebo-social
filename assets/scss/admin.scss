@@ -404,20 +404,23 @@ h3.title {
 /*
  * Admin - Widgets Page
  */
-.widget .widget-content .display,
-.widget .widget-content .style,
-.widget .widget-content .background,
-.widget .widget-content .conversations,
-.widget .widget-content .avatar,
-.widget .widget-content .media {
+
+// Twitter Widget
+.widget .kwidgetcontainer.twitter .display,
+.widget .kwidgetcontainer.twitter .style,
+.widget .kwidgetcontainer.twitter .background,
+.widget .kwidgetcontainer.twitter .conversations,
+.widget .kwidgetcontainer.twitter .avatar,
+.widget .kwidgetcontainer.twitter .media {
         display: none;
 }
-.widget .widget-content.tweets .display,
-.widget .widget-content.tweets .style,
-.widget .widget-content.tweets .background,
-.widget .widget-content.tweets .conversations,
-.widget .widget-content.tweets .avatar,
-.widget .widget-content.tweets.list .media {
+// Twitter Widget - Tweets
+.widget .kwidgetcontainer.twitter.tweets .display,
+.widget .kwidgetcontainer.twitter.tweets .style,
+.widget .kwidgetcontainer.twitter.tweets .background,
+.widget .kwidgetcontainer.twitter.tweets .conversations,
+.widget .kwidgetcontainer.twitter.tweets .avatar,
+.widget .kwidgetcontainer.twitter.tweets.list .media {
         display: block;
 }
 
